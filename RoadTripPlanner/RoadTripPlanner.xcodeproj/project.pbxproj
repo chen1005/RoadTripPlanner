@@ -13,6 +13,7 @@
 		04048ACB1BC608AE006B7BD7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04048ACA1BC608AE006B7BD7 /* Images.xcassets */; };
 		04048ACE1BC608AE006B7BD7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04048ACC1BC608AE006B7BD7 /* LaunchScreen.xib */; };
 		04048ADA1BC608AE006B7BD7 /* RoadTripPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AD91BC608AE006B7BD7 /* RoadTripPlannerTests.swift */; };
+		04048AE81BC720F0006B7BD7 /* SearchAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE71BC720F0006B7BD7 /* SearchAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		04048AD31BC608AE006B7BD7 /* RoadTripPlannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoadTripPlannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04048AD81BC608AE006B7BD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04048AD91BC608AE006B7BD7 /* RoadTripPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadTripPlannerTests.swift; sourceTree = "<group>"; };
+		04048AE71BC720F0006B7BD7 /* SearchAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,9 +79,11 @@
 		04048AC01BC608AE006B7BD7 /* RoadTripPlanner */ = {
 			isa = PBXGroup;
 			children = (
+				04048AE31BC608EA006B7BD7 /* API */,
+				04048AE41BC60904006B7BD7 /* Model */,
+				04048AE51BC6090A006B7BD7 /* View */,
+				04048AE61BC60910006B7BD7 /* Controller */,
 				04048AC31BC608AE006B7BD7 /* AppDelegate.swift */,
-				04048AC51BC608AE006B7BD7 /* ViewController.swift */,
-				04048AC71BC608AE006B7BD7 /* Main.storyboard */,
 				04048ACA1BC608AE006B7BD7 /* Images.xcassets */,
 				04048ACC1BC608AE006B7BD7 /* LaunchScreen.xib */,
 				04048AC11BC608AE006B7BD7 /* Supporting Files */,
@@ -110,6 +114,37 @@
 				04048AD81BC608AE006B7BD7 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		04048AE31BC608EA006B7BD7 /* API */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
+		04048AE41BC60904006B7BD7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				04048AE71BC720F0006B7BD7 /* SearchAnnotation.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		04048AE51BC6090A006B7BD7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04048AC71BC608AE006B7BD7 /* Main.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		04048AE61BC60910006B7BD7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				04048AC51BC608AE006B7BD7 /* ViewController.swift */,
+			);
+			name = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +247,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04048AE81BC720F0006B7BD7 /* SearchAnnotation.swift in Sources */,
 				04048AC61BC608AE006B7BD7 /* ViewController.swift in Sources */,
 				04048AC41BC608AE006B7BD7 /* AppDelegate.swift in Sources */,
 			);
@@ -343,6 +379,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RoadTripPlanner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -353,6 +390,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RoadTripPlanner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -411,6 +449,7 @@
 				04048ADF1BC608AE006B7BD7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		04048AE01BC608AE006B7BD7 /* Build configuration list for PBXNativeTarget "RoadTripPlannerTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +458,7 @@
 				04048AE21BC608AE006B7BD7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
