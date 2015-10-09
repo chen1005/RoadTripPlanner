@@ -146,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				04048AC51BC608AE006B7BD7 /* ViewController.swift */,
+				FB837EC61BC733DE004579F0 /* WeatherController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -253,7 +254,9 @@
 				04048AE81BC720F0006B7BD7 /* AnnotationModel.swift in Sources */,
 				04048AEA1BC744C6006B7BD7 /* AnnotationSets.swift in Sources */,
 				04048AC61BC608AE006B7BD7 /* ViewController.swift in Sources */,
+				FB837EC51BC733AF004579F0 /* WeatherModel.swift in Sources */,
 				04048AC41BC608AE006B7BD7 /* AppDelegate.swift in Sources */,
+				FB837EC71BC733DE004579F0 /* WeatherController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
