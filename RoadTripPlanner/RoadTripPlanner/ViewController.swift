@@ -11,7 +11,23 @@ import MapKit
 import CoreLocation
 
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+    @IBOutlet weak var searchText: UITextField!
     @IBOutlet weak var mapView: MKMapView!
+    
+    @IBAction func textFieldReturn(sender: AnyObject) {
+        sender.resignFirstResponder()
+        
+        mapView.removeAnnotations(mapView.annotations)
+        AnnotationSets.annotations.removeAll(keepCapacity: true);
+        
+        if (!searchText.text.isEmpty)
+        {
+            self.searchMap(searchText.text, completionHandler:{(success:Bool) -> Void in
+                println("value = \(success)")
+                self.zoomToFitMapAnnotations()
+            })
+        }
+    }
     
     // Initialize location to Purdue Univerisity - Zhuo Chen
     var currentLocation = CLLocation(latitude: 40.423705, longitude: -86.921195)
@@ -24,20 +40,16 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        /*locationManager.requestWhenInUseAuthorization()
+        locationManager.requestWhenInUseAuthorization()
         
-        if (CLLocationManager.locationServicesEnabled())
+        /*if (CLLocationManager.locationServicesEnabled())
         {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()
         }*/
 
-        mapView.mapType = .Standard
-        mapView.frame = view.frame
         mapView.delegate = self
-        view.addSubview(mapView)
-        
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .Follow
     }
@@ -47,7 +59,42 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         // Dispose of any resources that can be recreated.
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject])
+    func mapView(mapView: MKMapView!, didUpdateUserLocation
+        userLocation: MKUserLocation!) {
+            currentLocation = userLocation.location
+    }
+    
+    func zoomToFitMapAnnotations()
+    {
+        if(mapView.annotations.count == 0)
+        {
+            return
+        }
+        
+        var topLeftCoord = CLLocationCoordinate2D(latitude: -90, longitude: 180)
+    
+        var bottomRightCoord = CLLocationCoordinate2D(latitude: 90, longitude: -180)
+    
+        for annotation in mapView.annotations as! [MKAnnotation]
+        {
+            topLeftCoord.longitude = fmin(topLeftCoord.longitude, annotation.coordinate.longitude)
+            topLeftCoord.latitude = fmax(topLeftCoord.latitude, annotation.coordinate.latitude)
+    
+            bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, annotation.coordinate.longitude)
+            bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude)
+        }
+    
+        var regionLat = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5
+        var regionLong = topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5
+        var spanLat = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.15
+        var spanLong = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.15
+        var span = MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLong)
+        var centerLocation = CLLocation(latitude: regionLat, longitude: regionLong)
+        var region = MKCoordinateRegion(center: centerLocation.coordinate, span: span)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    /*func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject])
     {
         var locValue:CLLocationCoordinate2D = manager.location.coordinate
         currentLocation = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
@@ -60,31 +107,32 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         // Stop updating location - Zhuo Chen
         locationManager.stopUpdatingLocation()
-    }
+    }*/
     
     func addLocation(title:String, latitude:CLLocationDegrees, longitude:CLLocationDegrees)
     {
         let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let annotation = SearchAnnotation(coordinate: location, title: title)
+        let annotation = AnnotationModel(coordinate: location, title: title)
+        AnnotationSets.annotations.append(annotation)
         mapView.addAnnotation(annotation)
     }
     
-    func searchMap(place:String)
+    func searchMap(place:String, completionHandler: (success: Bool) -> Void)
     {
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = place
         
         // Search current region - Zhuo Chen
-        //let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-        request.region = mapView.region
+        let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        request.region = MKCoordinateRegion(center: currentLocation.coordinate, span: span)
         // Start searching - Zhuo Chen
         let search = MKLocalSearch(request: request)
         search.startWithCompletionHandler { (response: MKLocalSearchResponse!, error: NSError!) -> Void in
             for item in response.mapItems as! [MKMapItem] {
-                println("Name = \(item.name)")
-                println("Phone = \(item.phoneNumber)")
                 self.addLocation(item.name, latitude: item.placemark.location.coordinate.latitude, longitude: item.placemark.location.coordinate.longitude)
             }
+            
+            completionHandler(success: true)
         }
     }
 }

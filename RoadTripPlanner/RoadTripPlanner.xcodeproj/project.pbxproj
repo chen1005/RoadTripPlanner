@@ -13,7 +13,8 @@
 		04048ACB1BC608AE006B7BD7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04048ACA1BC608AE006B7BD7 /* Images.xcassets */; };
 		04048ACE1BC608AE006B7BD7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04048ACC1BC608AE006B7BD7 /* LaunchScreen.xib */; };
 		04048ADA1BC608AE006B7BD7 /* RoadTripPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AD91BC608AE006B7BD7 /* RoadTripPlannerTests.swift */; };
-		04048AE81BC720F0006B7BD7 /* SearchAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE71BC720F0006B7BD7 /* SearchAnnotation.swift */; };
+		04048AE81BC720F0006B7BD7 /* AnnotationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */; };
+		04048AEA1BC744C6006B7BD7 /* AnnotationSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +38,8 @@
 		04048AD31BC608AE006B7BD7 /* RoadTripPlannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoadTripPlannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04048AD81BC608AE006B7BD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04048AD91BC608AE006B7BD7 /* RoadTripPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadTripPlannerTests.swift; sourceTree = "<group>"; };
-		04048AE71BC720F0006B7BD7 /* SearchAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAnnotation.swift; sourceTree = "<group>"; };
+		04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationModel.swift; sourceTree = "<group>"; };
+		04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationSets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,7 +128,8 @@
 		04048AE41BC60904006B7BD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				04048AE71BC720F0006B7BD7 /* SearchAnnotation.swift */,
+				04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */,
+				04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -247,7 +250,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04048AE81BC720F0006B7BD7 /* SearchAnnotation.swift in Sources */,
+				04048AE81BC720F0006B7BD7 /* AnnotationModel.swift in Sources */,
+				04048AEA1BC744C6006B7BD7 /* AnnotationSets.swift in Sources */,
 				04048AC61BC608AE006B7BD7 /* ViewController.swift in Sources */,
 				04048AC41BC608AE006B7BD7 /* AppDelegate.swift in Sources */,
 			);

@@ -16,20 +16,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="102-vQ-13E">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="102-vQ-13E">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </mapView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bUb-6v-3gu">
+                                <rect key="frame" x="16" y="20" width="288" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="textFieldReturn:" destination="BYZ-38-t0r" eventType="editingDidEndOnExit" id="cY4-q5-JYe"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="102-vQ-13E" secondAttribute="trailing" id="8hh-5U-Mxy"/>
-                            <constraint firstItem="102-vQ-13E" firstAttribute="bottom" secondItem="2UX-zY-12M" secondAttribute="top" id="b0U-WA-Rlh"/>
-                            <constraint firstItem="102-vQ-13E" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="hwC-HY-N5E"/>
-                            <constraint firstItem="102-vQ-13E" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="rjy-Wj-0XV"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="102-vQ-13E" id="YL8-FB-nKS"/>
+                        <outlet property="searchText" destination="bUb-6v-3gu" id="BBM-Pn-bZQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
