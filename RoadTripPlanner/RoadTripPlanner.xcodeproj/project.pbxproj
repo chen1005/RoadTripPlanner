@@ -15,6 +15,7 @@
 		04048ADA1BC608AE006B7BD7 /* RoadTripPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AD91BC608AE006B7BD7 /* RoadTripPlannerTests.swift */; };
 		04048AE81BC720F0006B7BD7 /* AnnotationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */; };
 		04048AEA1BC744C6006B7BD7 /* AnnotationSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */; };
+		04DC2B281BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		04048AD91BC608AE006B7BD7 /* RoadTripPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadTripPlannerTests.swift; sourceTree = "<group>"; };
 		04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationModel.swift; sourceTree = "<group>"; };
 		04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationSets.swift; sourceTree = "<group>"; };
+		04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutePlanningViewControllerTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,7 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				04048AC51BC608AE006B7BD7 /* ViewController.swift */,
-				FB837EC61BC733DE004579F0 /* WeatherController.swift */,
+				04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -253,10 +255,9 @@
 			files = (
 				04048AE81BC720F0006B7BD7 /* AnnotationModel.swift in Sources */,
 				04048AEA1BC744C6006B7BD7 /* AnnotationSets.swift in Sources */,
+				04DC2B281BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift in Sources */,
 				04048AC61BC608AE006B7BD7 /* ViewController.swift in Sources */,
-				FB837EC51BC733AF004579F0 /* WeatherModel.swift in Sources */,
 				04048AC41BC608AE006B7BD7 /* AppDelegate.swift in Sources */,
-				FB837EC71BC733DE004579F0 /* WeatherController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
