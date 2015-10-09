@@ -29,16 +29,19 @@ class WeatherController: NSObject{
         //Initialize instance of WeatherModel
         let weatherData = WeatherModel()
         //build the URL
-        let queryURL = "\(baseURL)\(curWeather)\(query)\(apiKey)"
-        var request : NSMutableURLRequest = NSMutableURLRequest()
-        request.URL = NSURL(string: queryURL)
-        request.HTTPMethod = "GET"
-        //make the URL connection
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue(), completionHandler:{ (response:NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            
-            var error: AutoreleasingUnsafeMutablePointer<NSError?> = nil
-            //serialize json response object as NSDictionary
-            let jsonResponse = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error: error) as? NSDictionary
+        let queryURL = NSURL(fileURLWithPath: "\(baseURL)\(curWeather)\(query)\(apiKey)")
+        
+        //make the connection
+        let request = NSURLRequest(URL: queryURL, cachePolicy: .ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 5.0)
+        let session = NSURLSession.sharedSession()
+        
+        session.dataTaskWithRequest(request, completionHandler: {(data, response, error) in
+            print(data)
+            print(response)
+            print(error)
+         //serialize json response object as NSDictionary
+            do{
+            let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data!, options:NSJSONReadingOptions.MutableContainers) as? NSDictionary
             if(jsonResponse != nil){
                 //set weatherData values
                 weatherData.setLat((jsonResponse!["coord"] as! NSDictionary)["lat"]! as! Double)
@@ -47,7 +50,11 @@ class WeatherController: NSObject{
                 weatherData.setICode((jsonResponse!["weather"] as! NSDictionary)["icon"]! as! String)
                 weatherData.setWeight()
             }
-        })
+            }catch{
+                
+            }
+        }).resume()
+        
         //return WeatherModel object
         return weatherData
     }
