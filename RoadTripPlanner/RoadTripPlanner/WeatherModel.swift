@@ -15,10 +15,16 @@ class WeatherModel{
     var wcode: String
     var icode: String
     var weight: Double
+    var rain: Double
+    var clouds: Int
+    var wind: Double
     
     init(){
         self.lat = 0.0
         self.lon = 0.0
+        self.rain = 0.0
+        self.clouds = 0
+        self.wind = 0.0
         self.wcode = "000"
         self.icode = "000"
         self.weight = 0.0
@@ -35,6 +41,15 @@ class WeatherModel{
     }
     func setICode(icode: String){
         self.icode = icode
+    }
+    func setClouds(clouds: Int){
+        self.clouds = clouds
+    }
+    func setRain(rain: Double){
+        self.rain = rain
+    }
+    func setWind(wind: Double){
+        self.wind = wind
     }
     func setWeight(){
         switch self.wcode {
