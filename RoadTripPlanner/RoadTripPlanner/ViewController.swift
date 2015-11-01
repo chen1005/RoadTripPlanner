@@ -26,6 +26,15 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 println("value = \(success)")
                 self.zoomToFitMapAnnotations()
             })
+            
+            //Nick Houser- testing route search using two points on route - indianapolis and west lafayette
+            /*var currentRoute = [CLLocationCoordinate2D]()
+            currentRoute.append(CLLocationCoordinate2D(latitude: 40.423705, longitude: -86.921195)) //purdue
+            currentRoute.append(CLLocationCoordinate2D(latitude: 39.768491, longitude: -86.157679)) //indy
+            //currentRoute.append(CLLocationCoordinate2D(latitude: 34.052235, longitude: -118.243683)) //los angeles
+            searchRoute(searchText.text, points: currentRoute, completionHandler: {(success:Bool)->Void in
+            self.zoomToFitMapAnnotations()
+            })*/
         }
     }
     
@@ -133,6 +142,149 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             }
             
             completionHandler(success: true)
+        }
+    }
+    
+    //Nick Houser- dispatch variables to synchronize threads
+    //var threadcontrol = dispatch_group_create()
+    struct waypointOption {
+        var mapItem = MKMapItem() as MKMapItem
+        var cost = 0.0 as Double
+    }
+    var bestOptions = [waypointOption]()
+    
+    //Nick Houser- function for route search
+    //takes search string and array of location coordinates (which represent current route)
+    //note - we may need to add functionality to trim this if too many results
+    func searchRoute(place: String, points: [CLLocationCoordinate2D], completionHandler: (success: Bool) -> Void)
+    {
+        //to avoid exceptions if array is empty (should never happen)
+        if (points.count == 0)
+        {
+            return
+        }
+        
+        //clear the options array
+        bestOptions.removeAll(keepCapacity: false)
+        
+        //set up variables that don't need recreated in loop; request, searchstring, search radius
+        let request = MKLocalSearchRequest()
+        request.naturalLanguageQuery = place
+        
+        //loop through points
+        for routePointIndex in 0...points.count-2
+        {
+            //determine distance between the points using pythagoras
+            let lonOffset = points[routePointIndex].longitude - points[routePointIndex+1].longitude
+            let latOffset = points[routePointIndex].latitude - points[routePointIndex+1].latitude
+            let abDist = sqrt((lonOffset * lonOffset) + (latOffset * latOffset))
+            
+            //determine the center point between the points
+            let lonCen = (points[routePointIndex].longitude + points[routePointIndex+1].longitude)*0.5
+            let latCen = (points[routePointIndex].latitude + points[routePointIndex+1].latitude)*0.5
+            let searchCenter = CLLocationCoordinate2D(latitude: latCen, longitude: lonCen)
+            
+            //create the search and set its center and span
+            let searchRangeMultiplier = 1.1 * abDist
+            let searchSpan = MKCoordinateSpan(latitudeDelta: searchRangeMultiplier, longitudeDelta: searchRangeMultiplier)
+            request.region = MKCoordinateRegionMake(searchCenter, searchSpan)
+            let search = MKLocalSearch(request: request)
+            
+            //start the search
+            search.startWithCompletionHandler {
+                (response: MKLocalSearchResponse!, error: NSError!) -> Void in
+                
+                //for each result
+                for item in response.mapItems as! [MKMapItem] {
+                    
+                    
+                    self.addIfLessRoadDistBetween2Points(MKMapItem(placemark: MKPlacemark(coordinate: points[routePointIndex], addressDictionary: nil)), destination: item)
+                    
+                    //add a pin
+                    //self.addLocation(item.name, latitude: item.placemark.location.coordinate.latitude, longitude: item.placemark.location.coordinate.longitude)
+                }
+                
+                
+                //TODO: asynchronously add items to array
+                //after complete, add pins for each arr item
+                //add only if less time cost than whatever other items
+                //so keep best 10 options at all times
+                //TODO: make it so that it checks total trip distance not just distance from start
+                
+                //wait for threads to complete
+                sleep(10)
+                //dispatch_group_wait(self.threadcontrol, DISPATCH_TIME_FOREVER)
+                
+                //add the best results to the map
+                for bestOption in self.bestOptions
+                {
+                    self.addLocation(bestOption.mapItem.name, latitude: bestOption.mapItem.placemark.location.coordinate.latitude, longitude: bestOption.mapItem.placemark.location.coordinate.longitude)
+                }
+                
+                //only resize if this is the last iteration
+                if (routePointIndex == points.count - 2)
+                {
+                    completionHandler(success: true)
+                }
+            }
+        }
+    }
+    
+    //Nick Houser- function for computing road distance between two points
+    func addIfLessRoadDistBetween2Points(source: MKMapItem, destination: MKMapItem)
+    {
+        //synchronization
+        //dispatch_group_enter(threadcontrol)
+        
+        //turn inputs into map items for passing
+        //var source = MKMapItem(placemark: MKPlacemark(coordinate: start, addressDictionary: nil))
+        //var destination = MKMapItem(placemark: MKPlacemark(coordinate: finish, addressDictionary: nil))
+        
+        //set up request and execute it
+        var directionsRequest = MKDirectionsRequest()
+        directionsRequest.setSource(source)
+        directionsRequest.setDestination(destination)
+        var directions = MKDirections(request: directionsRequest)
+        
+        //find the distance from start to finish
+        directions.calculateDirectionsWithCompletionHandler { (response, error) -> Void in
+            //set up result structure
+            var toAppend = waypointOption()
+            toAppend.mapItem = source
+            toAppend.cost = response.routes.first!.distance
+            
+            //dispatch_sync(dispatch_get_main_queue()) {
+            if (self.bestOptions.count < 9)
+            {
+                //if there are not yet 9 pins, insert this
+                self.bestOptions.append(toAppend)
+            }
+            else
+            {
+                //otherwise, check if it is less than some other pin
+                var biggestIndex = 0
+                var biggestOption = self.bestOptions[0].cost
+                
+                //find the pin of greatest cost
+                for optionIterator in 0...self.bestOptions.count-1
+                {
+                    if (self.bestOptions[optionIterator].cost > biggestOption)
+                    {
+                        biggestIndex = optionIterator
+                        biggestOption = self.bestOptions[optionIterator].cost
+                    }
+                }
+                
+                //if the greatest cost pin costs more than this, replace it
+                if (toAppend.cost < biggestOption)
+                {
+                    self.bestOptions[biggestIndex] = toAppend
+                }
+            }
+            //}
+            
+            //release locks
+            //dispatch_group_leave(self.threadcontrol)
         }
     }
 }
