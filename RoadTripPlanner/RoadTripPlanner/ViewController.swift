@@ -169,11 +169,15 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         directions.calculateETAWithCompletionHandler{response, error in
             if error == nil{
+                return
+            }else{
                 if let res = response{
                     ret = NSInteger(res.expectedTravelTime)
                 }
             }
+            
         }
+        
         return ret
     }
     
