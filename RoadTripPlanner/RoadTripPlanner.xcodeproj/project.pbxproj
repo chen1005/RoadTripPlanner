@@ -16,6 +16,9 @@
 		04048AE81BC720F0006B7BD7 /* AnnotationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */; };
 		04048AEA1BC744C6006B7BD7 /* AnnotationSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */; };
 		04DC2B281BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */; };
+		FBE2DF641BEAD49800B46302 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE2DF631BEAD49800B46302 /* MapKit.framework */; };
+		FBF68F3C1BEA820600B5DE59 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF68F3A1BEA820600B5DE59 /* WeatherController.swift */; };
+		FBF68F3D1BEA820600B5DE59 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF68F3B1BEA820600B5DE59 /* WeatherModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +45,9 @@
 		04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationModel.swift; sourceTree = "<group>"; };
 		04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationSets.swift; sourceTree = "<group>"; };
 		04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutePlanningViewControllerTableViewController.swift; sourceTree = "<group>"; };
+		FBE2DF631BEAD49800B46302 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		FBF68F3A1BEA820600B5DE59 /* WeatherController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
+		FBF68F3B1BEA820600B5DE59 /* WeatherModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBE2DF641BEAD49800B46302 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +72,7 @@
 		04048AB51BC608AE006B7BD7 = {
 			isa = PBXGroup;
 			children = (
+				FBE2DF631BEAD49800B46302 /* MapKit.framework */,
 				04048AC01BC608AE006B7BD7 /* RoadTripPlanner */,
 				04048AD61BC608AE006B7BD7 /* RoadTripPlannerTests */,
 				04048ABF1BC608AE006B7BD7 /* Products */,
@@ -130,6 +138,7 @@
 		04048AE41BC60904006B7BD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FBF68F3B1BEA820600B5DE59 /* WeatherModel.swift */,
 				04048AE71BC720F0006B7BD7 /* AnnotationModel.swift */,
 				04048AE91BC744C6006B7BD7 /* AnnotationSets.swift */,
 			);
@@ -147,6 +156,7 @@
 		04048AE61BC60910006B7BD7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				FBF68F3A1BEA820600B5DE59 /* WeatherController.swift */,
 				04048AC51BC608AE006B7BD7 /* ViewController.swift */,
 				04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */,
 			);
@@ -202,6 +212,11 @@
 				TargetAttributes = {
 					04048ABD1BC608AE006B7BD7 = {
 						CreatedOnToolsVersion = 6.3;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					04048AD21BC608AE006B7BD7 = {
 						CreatedOnToolsVersion = 6.3;
@@ -255,6 +270,8 @@
 			files = (
 				04048AE81BC720F0006B7BD7 /* AnnotationModel.swift in Sources */,
 				04048AEA1BC744C6006B7BD7 /* AnnotationSets.swift in Sources */,
+				FBF68F3C1BEA820600B5DE59 /* WeatherController.swift in Sources */,
+				FBF68F3D1BEA820600B5DE59 /* WeatherModel.swift in Sources */,
 				04DC2B281BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift in Sources */,
 				04048AC61BC608AE006B7BD7 /* ViewController.swift in Sources */,
 				04048AC41BC608AE006B7BD7 /* AppDelegate.swift in Sources */,

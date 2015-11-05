@@ -152,6 +152,43 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         }
     }
     
+    //John Shetler - function to return estimated time between two points
+    //Takes two MKMapItem objects corresponding to the start and end points
+    //Can be modified to take points in lat, lon form
+    //returns travel time in seconds
+    func calculateETA(src: MKMapItem, dst: MKMapItem) -> NSTimeInterval {
+        let request = MKDirectionsRequest()
+        request.source = src
+        request.destination = dst
+        request.requestsAlternateRoutes = false
+        request.transportType = MKDirectionsTransportType.Automobile
+        var ret: NSTimeInterval
+        let directions = MKDirections(request: request)
+        
+        directions.calculateETAWithCompletionHandler{response, error in
+            if error == nil{
+                if let res = response{
+                    ret = res.expectedTravelTime
+                }
+            }
+        }
+        return ret
+    }
+    
+    //John Shetler - function to return the additional travel time resulting from
+    //adding "newPnt" to the route
+    //Can be modified to take oints in lat, lon form
+    //src and dst should be the stops that precede and follow newPnt respectively
+    //If stops are removed or reordered, estimated time needs to be recalculated
+    //returns additional travel time in seconds
+    func calculateAdditionalTime(src: MKMapItem, newPnt: MKMapItem, dst: MKMapItem)->NSTimeInterval{
+        let originalTime = calculateETA(src, dst: dst)
+        let startToNew = calculateETA(src, dst: newPnt)
+        let newToEnd = calculateETA(newPnt, dst: dst)
+        let modifiedTime = startToNew + newToEnd
+        return modifiedTime - originalTime        
+    }
+    
     //Nick Houser- function for route search
     //takes search string and array of location coordinates (which represent current route)
     //please note that if the points passed to this function are too far apart
