@@ -156,19 +156,21 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     //Takes two MKMapItem objects corresponding to the start and end points
     //Can be modified to take points in lat, lon form
     //returns travel time in seconds
-    func calculateETA(src: MKMapItem, dst: MKMapItem) -> NSTimeInterval {
+    func calculateETA(srcPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D) -> NSInteger {
         let request = MKDirectionsRequest()
+        let src = MKPlacemark(coordinate: srcPnt, addressDictionary: nil)
+        let dst = MKPlacemark(coordinate: dstPnt, addressDictionary: nil)
         request.source = src
         request.destination = dst
         request.requestsAlternateRoutes = false
         request.transportType = MKDirectionsTransportType.Automobile
-        var ret: NSTimeInterval
+        var ret: NSInteger
         let directions = MKDirections(request: request)
         
         directions.calculateETAWithCompletionHandler{response, error in
             if error == nil{
                 if let res = response{
-                    ret = res.expectedTravelTime
+                    ret = NSInteger(res.expectedTravelTime)
                 }
             }
         }
@@ -181,12 +183,12 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     //src and dst should be the stops that precede and follow newPnt respectively
     //If stops are removed or reordered, estimated time needs to be recalculated
     //returns additional travel time in seconds
-    func calculateAdditionalTime(src: MKMapItem, newPnt: MKMapItem, dst: MKMapItem)->NSTimeInterval{
-        let originalTime = calculateETA(src, dst: dst)
-        let startToNew = calculateETA(src, dst: newPnt)
-        let newToEnd = calculateETA(newPnt, dst: dst)
+    func calculateAdditionalTime(srcPnt: CLLocationCoordinate2D, newPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D)->NSInteger{
+        let originalTime = calculateETA(srcPnt, dstPnt: dstPnt)
+        let startToNew = calculateETA(srcPnt, dstPnt: newPnt)
+        let newToEnd = calculateETA(newPnt, dstPnt: dstPnt)
         let modifiedTime = startToNew + newToEnd
-        return modifiedTime - originalTime        
+        return (modifiedTime - originalTime)
     }
     
     //Nick Houser- function for route search
