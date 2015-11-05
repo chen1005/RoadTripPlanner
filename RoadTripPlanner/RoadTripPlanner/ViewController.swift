@@ -158,8 +158,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     //returns travel time in seconds
     func calculateETA(srcPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D) -> NSInteger {
         let request = MKDirectionsRequest()
-        let src = MKPlacemark(coordinate: srcPnt, addressDictionary: nil)
-        let dst = MKPlacemark(coordinate: dstPnt, addressDictionary: nil)
+        let src = MKMapItem(placemark: MKPlacemark(coordinate: srcPnt, addressDictionary: nil))
+        let dst = MKMapItem(placemark: MKPlacemark(coordinate: dstPnt, addressDictionary: nil))
         request.source = src
         request.destination = dst
         request.requestsAlternateRoutes = false
