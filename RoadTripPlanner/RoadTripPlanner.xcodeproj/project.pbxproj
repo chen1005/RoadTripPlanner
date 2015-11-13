@@ -96,6 +96,7 @@
 		04048AB51BC608AE006B7BD7 = {
 			isa = PBXGroup;
 			children = (
+				FBE2DF631BEAD49800B46302 /* MapKit.framework */,
 				04048AC01BC608AE006B7BD7 /* RoadTripPlanner */,
 				04048AD61BC608AE006B7BD7 /* RoadTripPlannerTests */,
 				04048ABF1BC608AE006B7BD7 /* Products */,
