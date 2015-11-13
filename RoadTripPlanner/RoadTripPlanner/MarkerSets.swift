@@ -1,5 +1,5 @@
 //
-//  SearchAnnotationSets.swift
+//  MarkerSets.swift
 //  RoadTripPlanner
 //
 //  Created by Rick Chen on 15/10/8.
@@ -8,6 +8,11 @@
 
 import UIKit
 
-class AnnotationSets: NSObject {
-    static var annotations : [AnnotationModel] = []
+class MarkerSets: NSObject
+{
+    var markers = Array<MarkerModel>()
+    
+    override init()
+    {
+    }
 }
