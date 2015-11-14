@@ -45,6 +45,8 @@ class WeatherController: NSObject{
             //print(error)
             //serialize json response object as NSDictionary
             do{
+                print("Hi I am here!")
+                print(data)
                 let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data!, options:NSJSONReadingOptions.MutableContainers) as? NSDictionary
                 if(jsonResponse != nil){
                     //set weatherData values
@@ -55,6 +57,7 @@ class WeatherController: NSObject{
                     weatherData.setWeight()
                 }
             }catch{
+                
                 
             }
         }).resume()
