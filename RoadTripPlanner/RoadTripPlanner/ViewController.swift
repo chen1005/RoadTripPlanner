@@ -91,7 +91,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                     destination = "place_id:" + item.placeId
                 }
             }
-            
+            //Update to use waypoints
+
+
             self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
                     self.searchRoute()
