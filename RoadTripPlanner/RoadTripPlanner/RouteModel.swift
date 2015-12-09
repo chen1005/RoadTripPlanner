@@ -21,7 +21,7 @@ class RouteModel: NSObject
     var totalDurationInSeconds: UInt = 0
     var totalDuration: String!
     var wayPoints = Array<CLLocationCoordinate2D>()
-    
+   
     override init()
     {
     }

@@ -91,6 +91,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                     destination = "place_id:" + item.placeId
                 }
             }
+            //Update to use waypoints
+            
             
             self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
@@ -451,6 +453,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     //Takes two MKMapItem objects corresponding to the start and end points
     //Can be modified to take points in lat, lon form
     //returns travel time in seconds
+    
+    /* Old code for AppleMaps
+    
     func calculateETA(srcPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D) -> NSInteger {
         let request = MKDirectionsRequest()
         let src = MKMapItem(placemark: MKPlacemark(coordinate: srcPnt, addressDictionary: nil))
@@ -476,12 +481,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         return ret
     }
     
+    */
+    
     //John Shetler - function to return the additional travel time resulting from
     //adding "newPnt" to the route
     //Can be modified to take oints in lat, lon form
     //src and dst should be the stops that precede and follow newPnt respectively
     //If stops are removed or reordered, estimated time needs to be recalculated
     //returns additional travel time in seconds
+    
+    /* Old code for AppleMaps
+    
     func calculateAdditionalTime(srcPnt: CLLocationCoordinate2D, newPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D)->NSInteger{
         let originalTime = calculateETA(srcPnt, dstPnt: dstPnt)
         let startToNew = calculateETA(srcPnt, dstPnt: newPnt)
@@ -489,7 +499,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         let modifiedTime = startToNew + newToEnd
         return (modifiedTime - originalTime)
     }
-    
+    */
     //Nick Houser- function for route search
     //takes search string and array of location coordinates (which represent current route)
     //please note that if the points passed to this function are too far apart
