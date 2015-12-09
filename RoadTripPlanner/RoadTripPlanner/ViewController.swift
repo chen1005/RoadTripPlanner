@@ -277,12 +277,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         route.originAddress = legs[0]["start_address"] as! String
         route.destinationAddress = legs[legs.count - 1]["end_address"] as! String
         
-        route.totalDistanceInMeters = 0
-        route.totalDurationInSeconds = 0
+        route.totalDistanceInMeters = (legs[0]["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
+        route.totalDurationInSeconds = (legs[0]["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
         
-        for leg in legs {
-            route.totalDistanceInMeters += (leg["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
-            route.totalDurationInSeconds += (leg["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
+        let steps = legs[0]["steps"] as! Array<Dictionary<NSObject, AnyObject>>
+        
+        for step in steps
+        {
+            let newStep = RouteStep()
+            newStep.distance = (step["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
+            newStep.duration = (step["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
+            let startStepDictionary = step["start_location"] as! Dictionary<NSObject, AnyObject>
+            let endStepDictionary = step["end_location"] as! Dictionary<NSObject, AnyObject>
+            newStep.startLocation = CLLocationCoordinate2DMake(startStepDictionary["lat"] as! Double, startLocationDictionary["lng"] as! Double)
+            newStep.endLocation = CLLocationCoordinate2DMake(endStepDictionary["lat"] as! Double, startLocationDictionary["lng"] as! Double)
+            newStep.instructions = step["html_instructions"] as! String
+            
+            route.steps.append(newStep)
         }
         
         let distanceInKilometers: Double = Double(route.totalDistanceInMeters / 1000)
@@ -344,8 +355,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 }
             }
             
-            let point = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-            route.wayPoints.append(point)
+            let waypoint = RouteWaypoint()
+            waypoint.location = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+            route.wayPoints.append(waypoint)
         }
     }
     
@@ -411,7 +423,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         {
             //let query = "lat=" + Int(item.latitude).description + "&lon=" + Int(item.longitude).description
             //let weather = weatherController.getCurrentWeather(query)
-            let position = CLLocationCoordinate2DMake(item.latitude, item.longitude)
+            let position = CLLocationCoordinate2DMake(item.location.latitude, item.location.longitude)
             let gmsMarker = GMSMarker(position: position)
             gmsMarker.icon = GMSMarker.markerImageWithColor(UIColor.grayColor())
             //gmsMarker.title = weather.icode

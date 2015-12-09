@@ -20,7 +20,8 @@ class RouteModel: NSObject
     var totalDistance: String!
     var totalDurationInSeconds: UInt = 0
     var totalDuration: String!
-    var wayPoints = Array<CLLocationCoordinate2D>()
+    var wayPoints = Array<RouteWaypoint>()
+    var steps = Array<RouteStep>()
     
     override init()
     {
