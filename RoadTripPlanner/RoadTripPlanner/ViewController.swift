@@ -302,8 +302,66 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         routeSets.defaultRoute = route;
     }
     
+    func distBetweenPoints(start: CLLocationCoordinate2D, end: CLLocationCoordinate2D) -> Double
+    {
+        return sqrt((start.longitude - end.longitude)^2 + (start.latitude - end.latitude)^2)
+    }
+    
     func calculateWayPoints(route: RouteModel)
     {
+        //NGH - need to modify this
+        //right now it is creating a set of WPs which form a straight line approximation of the route
+        //it needs to interact with the route.steps array and process it into a set of easily searchable waypoints
+        //aka. short steps (<1km) need to be concatenated
+        //aka. long steps (>100km) need to be subdivided
+        
+        //double representing the overflow area of a search circle
+        let overflowFactor = 1.1
+        
+        //for each step along the route
+        for (var x = 0; x < route.steps.length; x++)
+        {
+            let processedStep = route.steps[x]
+            
+            //process overly long steps
+            let maxSearchDiameter = 100000 / overflowFactor
+            if (route.steps[x].distance > maxSearchDiameter)
+            {
+                let numSubSteps = ceil(route.steps[x].distance / maxSearchDiameter)
+                
+            }
+            
+            //process overly short steps
+            let sumDistance = 0
+            var furthestStep = x - 1
+            while (sumDistance < 1000 && furthestStep < route.steps.length)
+            {
+                furthestStep = furthestStep + 1
+                sumDistance = sumDistance + route.steps[furthestStep].distance
+            }
+            if (furthestStep != x)
+            {
+                let processedStart = route.steps[x].start_location
+                let processedEnd = route.steps[furthestStep].end_location
+                let processedDistance = distBetweenPoints(start: processedStart, end: processedEnd)
+                let processedStep = Step(distance: processedDistance, start_location: processedStart, end_location: processedEnd)
+            }
+            
+            //find the center
+            let centerLong = (processedStep.start_location.longitude + processedStep.end_location.longitude) / 2
+            let centerLat = (processedStep.start_location.latitude + processedStep.end_location.latitude) / 2
+            
+            //find the radius
+            let searchRadius = Int(distBetweenPoints(start: processedStep.start_location, end: processedStep.end_location) * overflowFactor / 2)
+            
+            //append this data to route.waypoints
+            let point = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLong)
+            let waypoint = RouteWaypoint(radius: searchRadius, location: point)
+            route.wayPoints.append(waypoint)
+        }
+        
+        //END NGH
+        
         let lngDiff = fabs(route.destinationCoordinate.longitude - route.originCoordinate.longitude)
         let latDiff = fabs(route.destinationCoordinate.latitude - route.originCoordinate.latitude)
         
@@ -345,6 +403,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             }
             
             let point = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+            RouteWaypoint()
             route.wayPoints.append(point)
         }
     }
