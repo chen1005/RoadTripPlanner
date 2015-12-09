@@ -10,8 +10,8 @@ import Foundation
 
 class WeatherModel{
     
-    var lat: Double
-    var lon: Double
+    var lat: Int
+    var lon: Int
     var wcode: String
     var icode: String
     var weight: Double
@@ -20,8 +20,8 @@ class WeatherModel{
     var wind: Double
     
     init(){
-        self.lat = 0.0
-        self.lon = 0.0
+        self.lat = 0
+        self.lon = 0
         self.rain = 0.0
         self.clouds = 0
         self.wind = 0.0
@@ -30,10 +30,10 @@ class WeatherModel{
         self.weight = 0.0
     }
     
-    func setLat(lat: Double){
+    func setLat(lat: Int){
         self.lat = lat
     }
-    func setLon(lon: Double){
+    func setLon(lon: Int){
         self.lon = lon
     }
     func setWCode(wcode: String){
@@ -50,6 +50,9 @@ class WeatherModel{
     }
     func setWind(wind: Double){
         self.wind = wind
+    }
+    func setIcode(icode: String){
+        self.icode = icode
     }
     func setWeight(){
         switch self.wcode {
