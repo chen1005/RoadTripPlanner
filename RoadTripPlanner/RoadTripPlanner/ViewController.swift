@@ -58,6 +58,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         self.presentViewController(tripPlannerController, animated:true, completion:nil)
     }
     
+    @IBAction func getDirectionsClick(sender: AnyObject)
+    {
+        if (route.steps.count > 0)
+        {
+            self.presentViewController(navigationStepsController, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func textFieldReturn(sender: AnyObject) {
         sender.resignFirstResponder()
         
@@ -392,9 +400,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         partitionRoute(route)
 
         routeSets.defaultRoute = route
-        GlobalRouteModel.routeModel = route
-        
-        self.presentViewController(navigationStepsController, animated: true, completion: nil)
+        GlobalRouteModel.globalRoute = route
     }
     
     //return the distance between two points
