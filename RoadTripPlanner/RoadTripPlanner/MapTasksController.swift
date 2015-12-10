@@ -111,21 +111,15 @@ class MapTasksController: NSObject
         if let originLocation = origin {
             if let destinationLocation = destination
             {
-                var directionsURLString = baseURLDirections + "origin=" + originLocation + "&destination=" + destinationLocation + "&key=" + apiKey
-                
-                /* Update to use waypoints
+                // Update to use waypoints
                 
                 var directionsURLString = baseURLDirections + "origin=" + originLocation + "&destination=" + destinationLocation + "&waypoints="
-                
                 for waypoint in waypoints
                 {
                     directionsURLString += waypoint + "|"
                 }
                 
                 directionsURLString += "&key=" + apiKey
-                
-                */
-
 
                 directionsURLString = directionsURLString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
                 
