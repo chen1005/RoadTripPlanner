@@ -31,6 +31,9 @@
 		04F20FCD1BED0D1C00F99E21 /* TripPlannerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04F20FCB1BED0D1C00F99E21 /* TripPlannerController.xib */; };
 		04F20FCF1BED1BF300F99E21 /* UIColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F20FCE1BED1BF300F99E21 /* UIColorModel.swift */; };
 		04F20FD11BED1F3900F99E21 /* RouteInterestPointsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F20FD01BED1F3900F99E21 /* RouteInterestPointsModel.swift */; };
+		3A11DE441C19DB0600AEB911 /* NavigationStepsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A11DE431C19DB0600AEB911 /* NavigationStepsController.swift */; };
+		3A11DE461C19DB1D00AEB911 /* NavigationStepsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A11DE451C19DB1D00AEB911 /* NavigationStepsController.xib */; };
+		3A11DE481C19E0CF00AEB911 /* GlobalRouteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A11DE471C19E0CF00AEB911 /* GlobalRouteModel.swift */; };
 		F0F484580C8A05F306FB9016 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00AC8DAEFAF2E050B3D69A6 /* Pods.framework */; };
 		FBBC69861C19D24F00A533A6 /* RouteLegs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBBC69851C19D24F00A533A6 /* RouteLegs.swift */; };
 /* End PBXBuildFile section */
@@ -74,6 +77,9 @@
 		04F20FCB1BED0D1C00F99E21 /* TripPlannerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TripPlannerController.xib; sourceTree = "<group>"; };
 		04F20FCE1BED1BF300F99E21 /* UIColorModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorModel.swift; sourceTree = "<group>"; };
 		04F20FD01BED1F3900F99E21 /* RouteInterestPointsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteInterestPointsModel.swift; sourceTree = "<group>"; };
+		3A11DE431C19DB0600AEB911 /* NavigationStepsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationStepsController.swift; sourceTree = "<group>"; };
+		3A11DE451C19DB1D00AEB911 /* NavigationStepsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NavigationStepsController.xib; sourceTree = "<group>"; };
+		3A11DE471C19E0CF00AEB911 /* GlobalRouteModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalRouteModel.swift; sourceTree = "<group>"; };
 		73DC4C5CE03374826E19039B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A597DC8E9E9CAE44817DC3EC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		B00AC8DAEFAF2E050B3D69A6 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +184,7 @@
 				044731EF1BEC1A9F00367494 /* RouteSets.swift */,
 				04F20FCE1BED1BF300F99E21 /* UIColorModel.swift */,
 				04F20FD01BED1F3900F99E21 /* RouteInterestPointsModel.swift */,
+				3A11DE471C19E0CF00AEB911 /* GlobalRouteModel.swift */,
 				045115471C18E6170009592A /* RouteStep.swift */,
 				045115491C18E8540009592A /* RouteWaypoint.swift */,
 				FBBC69851C19D24F00A533A6 /* RouteLegs.swift */,
@@ -203,7 +210,9 @@
 				04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */,
 				041F73481BEAD6060027663A /* MapTasksController.swift */,
 				04F20FCA1BED0D1C00F99E21 /* TripPlannerController.swift */,
+				3A11DE431C19DB0600AEB911 /* NavigationStepsController.swift */,
 				04F20FCB1BED0D1C00F99E21 /* TripPlannerController.xib */,
+				3A11DE451C19DB1D00AEB911 /* NavigationStepsController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -312,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				046D53461BED4A6B009F0FEB /* launch.png in Resources */,
+				3A11DE461C19DB1D00AEB911 /* NavigationStepsController.xib in Resources */,
 				04DC2B371BC833B800551FD4 /* icon.png in Resources */,
 				04F20FCD1BED0D1C00F99E21 /* TripPlannerController.xib in Resources */,
 				04048AC91BC608AE006B7BD7 /* Main.storyboard in Resources */,
@@ -388,11 +398,13 @@
 				04048AE81BC720F0006B7BD7 /* MarkerModel.swift in Sources */,
 				045115481C18E6170009592A /* RouteStep.swift in Sources */,
 				04048AEA1BC744C6006B7BD7 /* MarkerSets.swift in Sources */,
+				3A11DE441C19DB0600AEB911 /* NavigationStepsController.swift in Sources */,
 				04DC2B341BC82CA100551FD4 /* WeatherController.swift in Sources */,
 				04F20FD11BED1F3900F99E21 /* RouteInterestPointsModel.swift in Sources */,
 				044731EE1BEC16A500367494 /* RouteModel.swift in Sources */,
 				04DC2B351BC82CA100551FD4 /* WeatherModel.swift in Sources */,
 				0451154A1C18E8540009592A /* RouteWaypoint.swift in Sources */,
+				3A11DE481C19E0CF00AEB911 /* GlobalRouteModel.swift in Sources */,
 				04F20FC41BEC6B7500F99E21 /* GooglePlacesAutocomplete.swift in Sources */,
 				04DC2B281BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift in Sources */,
 				041F73491BEAD6060027663A /* MapTasksController.swift in Sources */,
