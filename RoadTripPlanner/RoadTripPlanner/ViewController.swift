@@ -53,6 +53,65 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var searchText: UITextField!
     
+    @IBAction func addWayPointsClick(sender: AnyObject)
+    {
+        let addressAlert = UIAlertController(title: "Create Route", message: "Connect locations with a route:", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.text = "Current Location"
+        }
+        
+        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            if (self.selectedMarker != nil)
+            {
+                textField.text = self.selectedMarker.title
+            }
+            else
+            {
+                textField.placeholder = "Destination?"
+            }
+        }
+        
+        let createRouteAction = UIAlertAction(title: "Create Route", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
+            var origin = (addressAlert.textFields![0] as UITextField).text! as String
+            var destination = (addressAlert.textFields![1] as UITextField).text! as String
+            
+            if (origin == "Current Location")
+            {
+                origin = self.currentLocation.coordinate.latitude.description + "," + self.currentLocation.coordinate.longitude.description;
+            }
+            
+            for item in self.markerSets.markers
+            {
+                if (self.selectedMarker.position.latitude == item.latitude && self.selectedMarker.position.longitude == item.longitude)
+                {
+                    destination = "place_id:" + item.placeId
+                }
+            }
+            //Update to use waypoints
+            
+            self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
+                if success {
+                    self.searchRoute()
+                    self.configureMapAndMarkersForRoute()
+                    self.drawRoute()
+                }
+                else {
+                    print(status)
+                }
+            })
+        }
+        
+        let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
+            
+        }
+        
+        addressAlert.addAction(createRouteAction)
+        addressAlert.addAction(closeAction)
+        
+        presentViewController(addressAlert, animated: true, completion: nil)
+    }
+    
     @IBAction func routePlannerClick(sender: AnyObject)
     {
         self.presentViewController(tripPlannerController, animated:true, completion:nil)
@@ -60,9 +119,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     
     @IBAction func getDirectionsClick(sender: AnyObject)
     {
-        if (route.steps.count > 0)
+        if (routeSets.defaultRoute != nil)
         {
-            self.presentViewController(navigationStepsController, animated: true, completion: nil)
+            if (routeSets.defaultRoute.steps.count > 0)
+            {
+                self.presentViewController(navigationStepsController, animated:true, completion:nil)
+            }
+        }
+        else
+        {
+            // launch alert box
         }
     }
     
@@ -130,69 +196,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             }
             //Update to use waypoints
             var wayPoints = Array<String>()
-            //Hardcoded waypoint for testing
             wayPoints.append("Springfield,IL")
             
             self.mapTasks.getDirections(origin, destination: destination, waypoints: wayPoints, travelMode: nil, completionHandler: { (status, success) -> Void in
-                if success {
-                    self.searchRoute()
-                    self.configureMapAndMarkersForRoute()
-                    self.drawRoute()
-                }
-                else {
-                    print(status)
-                }
-            })
-        }
-        
-        let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
-            
-        }
-        
-        addressAlert.addAction(createRouteAction)
-        addressAlert.addAction(closeAction)
-        
-        presentViewController(addressAlert, animated: true, completion: nil)
-    }
-    
-    func addWayPoints()
-    {
-        let addressAlert = UIAlertController(title: "Create Route", message: "Connect locations with a route:", preferredStyle: UIAlertControllerStyle.Alert)
-        
-        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            textField.text = "Current Location"
-        }
-        
-        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            if (self.selectedMarker != nil)
-            {
-                textField.text = self.selectedMarker.title
-            }
-            else
-            {
-                textField.placeholder = "Destination?"
-            }
-        }
-        
-        let createRouteAction = UIAlertAction(title: "Create Route", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
-            var origin = (addressAlert.textFields![0] as UITextField).text! as String
-            var destination = (addressAlert.textFields![1] as UITextField).text! as String
-            
-            if (origin == "Current Location")
-            {
-                origin = self.currentLocation.coordinate.latitude.description + "," + self.currentLocation.coordinate.longitude.description;
-            }
-            
-            for item in self.markerSets.markers
-            {
-                if (self.selectedMarker.position.latitude == item.latitude && self.selectedMarker.position.longitude == item.longitude)
-                {
-                    destination = "place_id:" + item.placeId
-                }
-            }
-            //Update to use waypoints
-            
-            self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
                     self.searchRoute()
                     self.configureMapAndMarkersForRoute()
@@ -246,8 +252,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         else
         {
             selectedMarker = marker;
-            
-            addWayPoints()
         }
         
         return false
@@ -400,7 +404,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         partitionRoute(route)
 
         routeSets.defaultRoute = route
-        GlobalRouteModel.globalRoute = route
+        GlobalRouteModel.routeModel = route
     }
     
     //return the distance between two points

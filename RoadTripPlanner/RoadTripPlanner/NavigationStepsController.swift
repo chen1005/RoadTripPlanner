@@ -24,41 +24,26 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     
     func stripHtml(toEdit: String) -> String
     {
-        var currentChar : Character
-        var index : int
-        
         var processedStepString = ""
         var insideTag = false
-        var insideInnerTag = false
-        for (index = 0; index < toEdit.count(); index++)
+        for charac in toEdit.characters
         {
-            index = advance(toEdit.startIndex, 1)
-            currentChar = toEdit[index]
-            
             if (insideTag)
             {
-                if (currentChar == ">")
+                if (charac == ">")
                 {
-                    if (insideInnerTag)
-                    {
-                        insideInnerTag = false
-                    }
-                    else
-                    {
-                        insideTag = false
-                    }
+                    insideTag = false
                 }
             }
             else
             {
-                if (currentChar == "<")
+                if (charac == "<")
                 {
-                    insideInnerTag = true
                     insideTag = true
                 }
                 else
                 {
-                    processedStepString = processedStepString + ch
+                    processedStepString.append(charac)
                 }
             }
         }

@@ -114,9 +114,13 @@ class MapTasksController: NSObject
                 // Update to use waypoints
                 
                 var directionsURLString = baseURLDirections + "origin=" + originLocation + "&destination=" + destinationLocation + "&waypoints="
-                for waypoint in waypoints
+                
+                if (waypoints != nil)
                 {
-                    directionsURLString += waypoint + "|"
+                    for waypoint in waypoints
+                    {
+                        directionsURLString += waypoint + "|"
+                    }
                 }
                 
                 directionsURLString += "&key=" + apiKey
