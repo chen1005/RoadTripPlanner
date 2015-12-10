@@ -11,13 +11,6 @@ import GoogleMaps
 import CoreLocation
 
 class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
-    /*override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        gpaViewController.placeDelegate = self
-        
-        presentViewController(gpaViewController, animated: true, completion: nil)
-    }*/
     
     // Initialize location to Purdue Univerisity - Zhuo Chen
     var currentLocation = CLLocation(latitude: 40.423705, longitude: -86.921195)
@@ -30,7 +23,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     // Create Weather controller - Zhuo Chen
     let weatherController = WeatherController()
     // Create Google Place Autocomplete controller - Zhuo Chen
-    let gpaViewController = GooglePlacesAutocomplete(apiKey: "AIzaSyAEuoPxT43YjP704p9Tfmhp_1AeZNcMERM", placeType: .Address)
     let tripPlannerController = TripPlannerController()
     let navigationStepsController = NavigationStepsController()
     
@@ -734,18 +726,4 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             }
         }
     }*/
-}
-
-extension ViewController: GooglePlacesAutocompleteDelegate {
-    func placeSelected(place: Place) {
-        print(place.description)
-        
-        place.getDetails { details in
-            print(details)
-        }
-    }
-    
-    func placeViewClosed() {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
 }

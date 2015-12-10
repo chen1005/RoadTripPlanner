@@ -27,8 +27,6 @@
 		04DC2B341BC82CA100551FD4 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC2B321BC82CA100551FD4 /* WeatherController.swift */; };
 		04DC2B351BC82CA100551FD4 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC2B331BC82CA100551FD4 /* WeatherModel.swift */; };
 		04DC2B371BC833B800551FD4 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DC2B361BC833B800551FD4 /* icon.png */; };
-		04F20FC41BEC6B7500F99E21 /* GooglePlacesAutocomplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F20FC21BEC6B7500F99E21 /* GooglePlacesAutocomplete.swift */; };
-		04F20FC51BEC6B7500F99E21 /* GooglePlacesAutocomplete.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04F20FC31BEC6B7500F99E21 /* GooglePlacesAutocomplete.xib */; };
 		04F20FCC1BED0D1C00F99E21 /* TripPlannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F20FCA1BED0D1C00F99E21 /* TripPlannerController.swift */; };
 		04F20FCD1BED0D1C00F99E21 /* TripPlannerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04F20FCB1BED0D1C00F99E21 /* TripPlannerController.xib */; };
 		04F20FCF1BED1BF300F99E21 /* UIColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F20FCE1BED1BF300F99E21 /* UIColorModel.swift */; };
@@ -36,7 +34,7 @@
 		3A11DE441C19DB0600AEB911 /* NavigationStepsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A11DE431C19DB0600AEB911 /* NavigationStepsController.swift */; };
 		3A11DE461C19DB1D00AEB911 /* NavigationStepsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A11DE451C19DB1D00AEB911 /* NavigationStepsController.xib */; };
 		3A11DE481C19E0CF00AEB911 /* GlobalRouteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A11DE471C19E0CF00AEB911 /* GlobalRouteModel.swift */; };
-		F0F484580C8A05F306FB9016 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00AC8DAEFAF2E050B3D69A6 /* Pods.framework */; };
+		D5C5016E9DA8E101A29D6AAB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 654098DB8B903EF21722C8C8 /* libPods.a */; };
 		FBBC69861C19D24F00A533A6 /* RouteLegs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBBC69851C19D24F00A533A6 /* RouteLegs.swift */; };
 /* End PBXBuildFile section */
 
@@ -75,8 +73,6 @@
 		04DC2B321BC82CA100551FD4 /* WeatherController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
 		04DC2B331BC82CA100551FD4 /* WeatherModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		04DC2B361BC833B800551FD4 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		04F20FC21BEC6B7500F99E21 /* GooglePlacesAutocomplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GooglePlacesAutocomplete.swift; sourceTree = "<group>"; };
-		04F20FC31BEC6B7500F99E21 /* GooglePlacesAutocomplete.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GooglePlacesAutocomplete.xib; sourceTree = "<group>"; };
 		04F20FCA1BED0D1C00F99E21 /* TripPlannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripPlannerController.swift; sourceTree = "<group>"; };
 		04F20FCB1BED0D1C00F99E21 /* TripPlannerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TripPlannerController.xib; sourceTree = "<group>"; };
 		04F20FCE1BED1BF300F99E21 /* UIColorModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorModel.swift; sourceTree = "<group>"; };
@@ -84,9 +80,9 @@
 		3A11DE431C19DB0600AEB911 /* NavigationStepsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationStepsController.swift; sourceTree = "<group>"; };
 		3A11DE451C19DB1D00AEB911 /* NavigationStepsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NavigationStepsController.xib; sourceTree = "<group>"; };
 		3A11DE471C19E0CF00AEB911 /* GlobalRouteModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalRouteModel.swift; sourceTree = "<group>"; };
+		654098DB8B903EF21722C8C8 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		73DC4C5CE03374826E19039B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A597DC8E9E9CAE44817DC3EC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		B00AC8DAEFAF2E050B3D69A6 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBBC69851C19D24F00A533A6 /* RouteLegs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteLegs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0F484580C8A05F306FB9016 /* Pods.framework in Frameworks */,
+				D5C5016E9DA8E101A29D6AAB /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,8 +203,6 @@
 		04048AE61BC60910006B7BD7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				04F20FC21BEC6B7500F99E21 /* GooglePlacesAutocomplete.swift */,
-				04F20FC31BEC6B7500F99E21 /* GooglePlacesAutocomplete.xib */,
 				04DC2B321BC82CA100551FD4 /* WeatherController.swift */,
 				04048AC51BC608AE006B7BD7 /* ViewController.swift */,
 				04DC2B271BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift */,
@@ -235,7 +229,7 @@
 		8694ECE3C5375EB4F151FD24 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B00AC8DAEFAF2E050B3D69A6 /* Pods.framework */,
+				654098DB8B903EF21722C8C8 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -334,7 +328,6 @@
 				04048AC91BC608AE006B7BD7 /* Main.storyboard in Resources */,
 				04048ACE1BC608AE006B7BD7 /* LaunchScreen.xib in Resources */,
 				04048ACB1BC608AE006B7BD7 /* Images.xcassets in Resources */,
-				04F20FC51BEC6B7500F99E21 /* GooglePlacesAutocomplete.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,7 +406,6 @@
 				049B24101C1A289700CAACAE /* WaypointController.swift in Sources */,
 				0451154A1C18E8540009592A /* RoutePartitionPoint.swift in Sources */,
 				3A11DE481C19E0CF00AEB911 /* GlobalRouteModel.swift in Sources */,
-				04F20FC41BEC6B7500F99E21 /* GooglePlacesAutocomplete.swift in Sources */,
 				04DC2B281BC80F6800551FD4 /* RoutePlanningViewControllerTableViewController.swift in Sources */,
 				041F73491BEAD6060027663A /* MapTasksController.swift in Sources */,
 				04F20FCC1BED0D1C00F99E21 /* TripPlannerController.swift in Sources */,
