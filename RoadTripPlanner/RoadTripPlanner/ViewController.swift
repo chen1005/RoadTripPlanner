@@ -55,61 +55,45 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     
     @IBAction func addWayPointsClick(sender: AnyObject)
     {
-        let addressAlert = UIAlertController(title: "Create Route", message: "Connect locations with a route:", preferredStyle: UIAlertControllerStyle.Alert)
-        
-        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            textField.text = "Current Location"
-        }
-        
-        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            if (self.selectedMarker != nil)
-            {
-                textField.text = self.selectedMarker.title
-            }
-            else
-            {
-                textField.placeholder = "Destination?"
-            }
-        }
-        
-        let createRouteAction = UIAlertAction(title: "Create Route", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
-            var origin = (addressAlert.textFields![0] as UITextField).text! as String
-            var destination = (addressAlert.textFields![1] as UITextField).text! as String
+        if (self.selectedMarker != nil && routeSets.defaultRoute != nil)
+        {
+            let addressAlert = UIAlertController(title: "Add Waypoint", message: "\"" + self.selectedMarker.title + "\"" + " will be added to the route.\n\n" + "What stop number should this be?", preferredStyle: UIAlertControllerStyle.Alert)
             
-            if (origin == "Current Location")
-            {
-                origin = self.currentLocation.coordinate.latitude.description + "," + self.currentLocation.coordinate.longitude.description;
+            addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+                    textField.placeholder = "Enter range between " + "(1, " + (self.routeSets.defaultRoute.wayPoints.count + 1).description + ")"
             }
             
-            for item in self.markerSets.markers
-            {
-                if (self.selectedMarker.position.latitude == item.latitude && self.selectedMarker.position.longitude == item.longitude)
-                {
-                    destination = "place_id:" + item.placeId
-                }
+            let createRouteAction = UIAlertAction(title: "Add", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
+                let order = (addressAlert.textFields![0] as UITextField).text! as String
+                let waypoint = self.selectedMarker.title
+                
+                self.routeSets.defaultRoute.wayPoints.insert(waypoint, atIndex: Int(order)! - 1)
             }
-            //Update to use waypoints
             
-            self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
-                if success {
-                    self.searchRoute()
-                    self.configureMapAndMarkersForRoute()
-                    self.drawRoute()
-                }
-                else {
-                    print(status)
-                }
-            })
-        }
-        
-        let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
+            let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
+                
+            }
             
+            addressAlert.addAction(createRouteAction)
+            addressAlert.addAction(closeAction)
+            
+            presentViewController(addressAlert, animated: true, completion: nil)
         }
-        
-        addressAlert.addAction(createRouteAction)
-        addressAlert.addAction(closeAction)
-        
-        presentViewController(addressAlert, animated: true, completion: nil)
+        else
+        {
+            var message = ""
+            
+            if (self.selectedMarker == nil)
+            {
+                message = "No waypoint selected"
+            }
+            else if (self.routeSets.defaultRoute == nil)
+            {
+                message = "No route created"
+            }
+            
+            showErrorAlert(message)
+        }
     }
     
     @IBAction func routePlannerClick(sender: AnyObject)
@@ -117,7 +101,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         self.presentViewController(tripPlannerController, animated:true, completion:nil)
     }
     
-    @IBAction func getDirectionsClick(sender: AnyObject)
+    @IBAction func showNavigationClick(sender: AnyObject)
     {
         if (routeSets.defaultRoute != nil)
         {
@@ -128,7 +112,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         }
         else
         {
-            // launch alert box
+            let message = "No route created"
+            showErrorAlert(message)
         }
     }
     
@@ -159,7 +144,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         }
     }
     
-    @IBAction func routeCalculator(sender: AnyObject)
+    @IBAction func routeCalculatorClick(sender: AnyObject)
     {
         let addressAlert = UIAlertController(title: "Create Route", message: "Connect locations with a route:", preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -241,6 +226,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func showErrorAlert(message: String)
+    {
+        let addressAlert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
+            
+        }
+        
+        addressAlert.addAction(closeAction)
+        
+        presentViewController(addressAlert, animated: true, completion: nil)
     }
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool

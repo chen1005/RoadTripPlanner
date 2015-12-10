@@ -29,7 +29,7 @@
                                     <action selector="textFieldReturn:" destination="BYZ-38-t0r" eventType="editingDidEndOnExit" id="cY4-q5-JYe"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bo0-4N-tva" userLabel="Route Calculate">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bo0-4N-tva">
                                 <rect key="frame" x="122" y="629" width="114" height="30"/>
                                 <state key="normal" title="Add Waypoints"/>
                                 <connections>
@@ -47,14 +47,14 @@
                                 <rect key="frame" x="241" y="629" width="114" height="30"/>
                                 <state key="normal" title="Route Calculate"/>
                                 <connections>
-                                    <action selector="routeCalculator:" destination="BYZ-38-t0r" eventType="touchDown" id="edI-Fu-64C"/>
+                                    <action selector="routeCalculatorClick:" destination="BYZ-38-t0r" eventType="touchDown" id="Y2b-LD-yLJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AxF-oH-0qv" userLabel="Route Calculate">
-                                <rect key="frame" x="9" y="603" width="114" height="30"/>
-                                <state key="normal" title="Get Directions"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AxF-oH-0qv">
+                                <rect key="frame" x="9" y="603" width="91" height="30"/>
+                                <state key="normal" title="Navigation"/>
                                 <connections>
-                                    <action selector="getDirectionsClick:" destination="BYZ-38-t0r" eventType="touchDown" id="DMJ-V0-NpI"/>
+                                    <action selector="showNavigationClick:" destination="BYZ-38-t0r" eventType="touchDown" id="GWx-rR-nkD"/>
                                 </connections>
                             </button>
                         </subviews>
