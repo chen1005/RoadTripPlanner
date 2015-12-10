@@ -323,7 +323,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         route.totalDuration = "Duration: \(days) d, \(remainingHours) h, \(remainingMins) mins, \(remainingSecs) secs"
         
-        calculateWayPoints(route)
+        partitionRoute(route)
 
         routeSets.defaultRoute = route;
     }
@@ -354,7 +354,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     }
     
     //use the list of steps stored in the route to generate a list of waypoints to search
-    func calculateWayPoints(route: RouteModel)
+    func partitionRoute(route: RouteModel)
     {
         //constant representing the overflow area of a search circle
         let overflowFactor = 1.1
