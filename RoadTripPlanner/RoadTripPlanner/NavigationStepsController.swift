@@ -50,6 +50,43 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         return processedStepString
     }
     
+    func parseDistance(dist: Int) -> String
+    {
+        if (dist >= 1000)
+        {
+            toRet = String(ceil(dist / 1000))
+            toret = toret + " km"
+        }
+        else
+        {
+            var toRet = String(dist)
+            toRet = toRet + " m"
+        }
+    }
+    
+    func parseDuration(dur: Int) -> String
+    {
+        if (dur > 60)
+        {
+            dur = Int(ceil(Double(dur) / 60.0))
+            let hours = Int(floor(Double(dur) / 60.0))
+            let minutes = dur % 60
+            
+            if (hours == 0)
+            {
+                return minutes + " minutes"
+            }
+            else
+            {
+                return hours + " h, " + minutes + " m"
+            }
+        }
+        else
+        {
+            return "Less than 1 minute"
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,13 +94,21 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         tableView.delegate = self
         tableView.dataSource = self
         
-        //add the route steps to the view
         if (GlobalRouteModel.routeModel != nil)
         {
             route = GlobalRouteModel.routeModel
+            
+            //add the totals at the top of the view
+            self.items.append("Total Distance: " + parseDistance(route.totalDistanceInMeters))
+            self.items.append("Total Time: " + parseDuration(route.totalDurationInSeconds))
+            self.items.append("Total Time With Weather: " + parseDuration(adjustedDurationInSeconds))
+            
+            //add the route steps to the view
             for step in route.steps
             {
                 self.items.append(stripHtml(step.instructions))
+                let estimationString = "   " + parseDistance(step.distance) + " - " + parseDuration(step.duration)
+                self.items.append(estimationString)
             }
         }
         
@@ -82,7 +127,16 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         
+        //NGH - wrap overflowing direction lines
+        cell.textLabel?.lineBreakMode = UILineBreakModeWordWrap;
+        
         cell.textLabel?.text = self.items[indexPath.row]
+        
+        //NGH - make the header cells a different color
+        if (self.items[indexPath.row].componentsSeparatedByString(" ")[0] == "Total")
+        {
+            cell.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
+        }
         
         return cell
     }
