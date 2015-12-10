@@ -97,6 +97,11 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
         if (GlobalRouteModel.routeModel != nil)
         {
@@ -108,7 +113,7 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
             //add the totals at the top of the view
             self.items.append("Total Distance: " + parseDistance(route.totalDistanceInMeters))
             self.items.append("Total Time: " + parseDuration(route.totalDurationInSeconds))
-            self.items.append("Total Time With Weather: " + parseDuration(route.adjustedDurationInSeconds))
+            self.items.append("Total With Weather: " + parseDuration(route.adjustedDurationInSeconds))
             
             //add the route steps to the view
             for step in route.steps
@@ -118,8 +123,6 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
                 self.items.append(estimationString)
             }
         }
-        
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     override func didReceiveMemoryWarning() {
@@ -140,10 +143,10 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         cell.textLabel?.text = self.items[indexPath.row]
         
         //NGH - make the header cells a different color
-        if (self.items[indexPath.row].componentsSeparatedByString(" ")[0] == "Total")
-        {
-            cell.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
-        }
+        //if (self.items[indexPath.row].componentsSeparatedByString(" ")[0] == "Total")
+        //{
+            //cell.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
+        //}
         
         return cell
     }
