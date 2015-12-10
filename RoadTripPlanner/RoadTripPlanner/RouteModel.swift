@@ -19,6 +19,7 @@ class RouteModel: NSObject
     var totalDistanceInMeters: UInt = 0
     var totalDistance: String!
     var totalDurationInSeconds: UInt = 0
+    var adjustedDurationInSeconds: UInt = 0
     var totalDuration: String!
     var partitionPoints = Array<RoutePartitionPoint>()
     var steps = Array<RouteStep>()
