@@ -477,7 +477,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             let gmsMarker = GMSMarker(position: position)
             gmsMarker.icon = GMSMarker.markerImageWithColor(UIColor.grayColor())
             
-            let query = "lat=" + Int(item.location.latitude).description + "&lon=" + Int(item.location.longitude).description
+            let query = "lat=" + item.location.latitude.description + "&lon=" + item.location.longitude.description
             let weatherData = WeatherModel()
             weatherController.getCurrentWeather(query, weatherData: weatherData, completionHandler: {(status, success)-> Void in
                 if (!success)
@@ -486,8 +486,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 }
                 else
                 {
-                    gmsMarker.title = weatherData.icode
-                    gmsMarker.snippet = "Clouds: " + weatherData.clouds.description + " Rains: " + weatherData.rain.description + " Wind: " + weatherData.wind.description + " Weights: " + weatherData.weight.description
+                    gmsMarker.title = "Lon: " + weatherData.lon.description + " Lat: " + weatherData.lat.description
+                    gmsMarker.snippet = "Weather: " + weatherData.main + " Description: " + weatherData.des + "\nTemp: " + weatherData.temp.description + " Pressure: " + weatherData.pressure.description + " Humidity: " + weatherData.humidity.description + "\nClouds: " + weatherData.clouds.description + " Wind: " + weatherData.wind.description + " Weights: " + weatherData.weight.description
                 }
             })
             

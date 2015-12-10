@@ -10,34 +10,83 @@ import Foundation
 
 class WeatherModel{
     
-    var lat: Int
-    var lon: Int
+    var lat: Double
+    var lon: Double
     var wcode: String
     var icode: String
     var weight: Double
     var rain: Double
     var clouds: Int
     var wind: Double
+    var main: String
+    var des: String
+    var temp: Double
+    var temp_max: Double
+    var temp_min: Double
+    var pressure: Int
+    var humidity: Int
     
     init(){
-        self.lat = 0
-        self.lon = 0
+        self.lat = 0.0
+        self.lon = 0.0
         self.rain = 0.0
         self.clouds = 0
         self.wind = 0.0
         self.wcode = "000"
         self.icode = "000"
         self.weight = 0.0
+        self.main = ""
+        self.des = ""
+        self.temp = 0.0
+        self.temp_max = 0.0
+        self.temp_min = 0.0
+        self.pressure = 0
+        self.humidity = 0
     }
     
-    func setLat(lat: Int){
+    func setMain(main: String)
+    {
+        self.main = main
+    }
+    
+    func setDes(des: String)
+    {
+        self.des = des
+    }
+    
+    func setTemp(temp: Double)
+    {
+        self.temp = (temp - 273) / 5.0 * 9.0 + 32
+    }
+    
+    func setMaxTemp(maxTemp: Double)
+    {
+        self.temp_max = (maxTemp - 273) / 5.0 * 9.0 + 32
+    }
+    
+    func setMinTemp(minTemp: Double)
+    {
+        self.temp_min = (minTemp - 273) / 5.0 * 9.0 + 32
+    }
+    
+    func setPressure(pressure: Int)
+    {
+        self.pressure = pressure
+    }
+    
+    func setHumidity(humidity: Int)
+    {
+        self.humidity = humidity
+    }
+    
+    func setLat(lat: Double){
         self.lat = lat
     }
-    func setLon(lon: Int){
+    func setLon(lon: Double){
         self.lon = lon
     }
-    func setWCode(wcode: String){
-        self.wcode = wcode
+    func setWCode(wcode: Int){
+        self.wcode = wcode.description
     }
     func setICode(icode: String){
         self.icode = icode
@@ -51,9 +100,7 @@ class WeatherModel{
     func setWind(wind: Double){
         self.wind = wind
     }
-    func setIcode(icode: String){
-        self.icode = icode
-    }
+
     func setWeight(){
         switch self.wcode {
             //000 = error case
@@ -217,8 +264,4 @@ class WeatherModel{
             self.weight = 1.0
         }
     }
-    
-    
-    
-    
 }
