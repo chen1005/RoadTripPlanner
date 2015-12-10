@@ -22,6 +22,49 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         self.dismissViewControllerAnimated(true, completion:nil)
     }
     
+    func stripHtml(toEdit: String) -> String
+    {
+        var currentChar : Character
+        var index : int
+        
+        var processedStepString = ""
+        var insideTag = false
+        var insideInnerTag = false
+        for (index = 0; index < toEdit.count(); index++)
+        {
+            index = advance(toEdit.startIndex, 1)
+            currentChar = toEdit[index]
+            
+            if (insideTag)
+            {
+                if (currentChar == ">")
+                {
+                    if (insideInnerTag)
+                    {
+                        insideInnerTag = false
+                    }
+                    else
+                    {
+                        insideTag = false
+                    }
+                }
+            }
+            else
+            {
+                if (currentChar == "<")
+                {
+                    insideInnerTag = true
+                    insideTag = true
+                }
+                else
+                {
+                    processedStepString = processedStepString + ch
+                }
+            }
+        }
+        return processedStepString
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,7 +78,7 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
             route = GlobalRouteModel.routeModel
             for step in route.steps
             {
-                self.items.append(step.instructions)
+                self.items.append(stripHtml(step.instructions))
             }
         }
         
@@ -55,14 +98,6 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         
         cell.textLabel?.text = self.items[indexPath.row]
-        cell.backgroundColor = uiColors.colors[uiColorIndex]
-        self.itemsColors.append(uiColors.colors[uiColorIndex])
-        uiColorIndex++
-        
-        if (uiColorIndex == uiColors.colors.count)
-        {
-            uiColorIndex = 0
-        }
         
         return cell
     }
@@ -70,7 +105,6 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             items.removeAtIndex(indexPath.row)
-            itemsColors.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }

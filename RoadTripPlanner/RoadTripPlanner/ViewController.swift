@@ -388,9 +388,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         partitionRoute(route)
 
         routeSets.defaultRoute = route
-        GlobalRouteModel.routeModel = route
-        
-        self.presentViewController(navigationStepsController, animated: true, completion: nil)
+        GlobalRouteModel.globalRoute = route
     }
     
     //return the distance between two points
