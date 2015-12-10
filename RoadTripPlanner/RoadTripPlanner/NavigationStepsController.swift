@@ -55,14 +55,6 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         
         cell.textLabel?.text = self.items[indexPath.row]
-        cell.backgroundColor = uiColors.colors[uiColorIndex]
-        self.itemsColors.append(uiColors.colors[uiColorIndex])
-        uiColorIndex++
-        
-        if (uiColorIndex == uiColors.colors.count)
-        {
-            uiColorIndex = 0
-        }
         
         return cell
     }
@@ -70,7 +62,6 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             items.removeAtIndex(indexPath.row)
-            itemsColors.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
