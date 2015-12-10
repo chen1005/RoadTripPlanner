@@ -14,7 +14,7 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     var itemsColors = Array<UIColor>()
     var uiColorIndex = 0;
     let uiColors = UIColorModel()
-    var route : RouteModel
+    var route : RouteModel!
     
     @IBOutlet weak var tableView: UITableView!
     @IBAction func mapViewTap(sender: AnyObject)
@@ -30,9 +30,9 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         tableView.dataSource = self
         
         //add the route steps to the view
-        if (GlobalRoute.routeModel != nil)
+        if (GlobalRouteModel.routeModel != nil)
         {
-            route = GlobalRoute.routeModel
+            route = GlobalRouteModel.routeModel
             for step in route.steps
             {
                 self.items.append(step.instructions)

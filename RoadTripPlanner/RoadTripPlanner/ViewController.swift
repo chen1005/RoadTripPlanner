@@ -346,19 +346,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             let newLeg = RouteLegs()
             let startLocationDictionary = leg["start_location"] as! Dictionary<NSObject, AnyObject>
             let endLocationDictionary = leg["end_location"] as! Dictionary<NSObject, AnyObject>
-            newLeg.startLocation = CLLocationCoordinate2DMake(startLocationDictionary["lat"] as! Double, locationDictionary["lng"] as! Double)
-            newLeg.endLocation = CLLocationCoordinate2DMake(endLocationDictionary["lat"] as! Double, locationDictionary["lng"] as! Double)
-            newLeg.startName = leg["start_address"]
-            newLeg.endName = leg["end_address"]
+            newLeg.startLocation = CLLocationCoordinate2DMake(startLocationDictionary["lat"] as! Double, startLocationDictionary["lng"] as! Double)
+            newLeg.endLocation = CLLocationCoordinate2DMake(endLocationDictionary["lat"] as! Double, endLocationDictionary["lng"] as! Double)
+            newLeg.startName = leg["start_address"] as! String
+            newLeg.endName = leg["end_address"] as! String
             newLeg.distance = (leg["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
             newLeg.duration = (leg["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
             route.legs.append(newLeg)
             
             route.totalDistanceInMeters += newLeg.distance
             route.totalDurationInSeconds += newLeg.duration
+            let steps = leg["steps"] as! Array<Dictionary<NSObject, AnyObject>>
             for step in steps
             {
-                let steps = leg["steps"] as! Array<Dictionary<NSObject, AnyObject>>
+                
                 let newStep = RouteStep()
                 newStep.distance = (step["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
                 newStep.duration = (step["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
@@ -388,7 +389,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         partitionRoute(route)
 
         routeSets.defaultRoute = route
-        GlobalRouteModel.globalRoute = route
+        GlobalRouteModel.routeModel = route
         
         self.presentViewController(navigationStepsController, animated: true, completion: nil)
     }
