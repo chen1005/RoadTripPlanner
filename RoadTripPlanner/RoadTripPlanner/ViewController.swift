@@ -128,6 +128,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     // Create Google Place Autocomplete controller - Zhuo Chen
     let gpaViewController = GooglePlacesAutocomplete(apiKey: "AIzaSyAEuoPxT43YjP704p9Tfmhp_1AeZNcMERM", placeType: .Address)
     let tripPlannerController = TripPlannerController()
+    let navigationStepsController = NavigationStepsController()
     
     // Create MarkerSets Model - Zhuo Chen
     var markerSets = MarkerSets()
@@ -311,7 +312,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         calculateWayPoints(route)
 
-        routeSets.defaultRoute = route;
+        routeSets.defaultRoute = route
+        GlobalRouteModel.globalRoute = route
+        
+        self.presentViewController(navigationStepsController, animated: true, completion: nil)
     }
     
     //return the distance between two points
