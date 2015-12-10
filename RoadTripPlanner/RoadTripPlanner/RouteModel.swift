@@ -16,10 +16,12 @@ class RouteModel: NSObject
     var destinationCoordinate: CLLocationCoordinate2D!
     var originAddress: String!
     var destinationAddress: String!
-    var totalDistanceInMeters: UInt = 0
+    var totalDistanceInMeters = 0
     var totalDistance: String!
-    var totalDurationInSeconds: UInt = 0
-    var adjustedDurationInSeconds: UInt = 0
+    var totalDurationInSeconds = 0
+    var adjustedDurationInSeconds = 0
+    var totalRadiusInMeters = 0.0
+    var adjustedRadiusInMeters = 0.0
     var totalDuration: String!
     var partitionPoints = Array<RoutePartitionPoint>()
     var steps = Array<RouteStep>()

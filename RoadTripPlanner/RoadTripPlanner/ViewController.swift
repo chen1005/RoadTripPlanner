@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MapKit
 import GoogleMaps
 import CoreLocation
 
@@ -363,12 +362,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             newLeg.endLocation = CLLocationCoordinate2DMake(endLocationDictionary["lat"] as! Double, endLocationDictionary["lng"] as! Double)
             newLeg.startName = leg["start_address"] as! String
             newLeg.endName = leg["end_address"] as! String
-            newLeg.distance = (leg["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
-            newLeg.duration = (leg["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
+            newLeg.distance = (leg["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
+            newLeg.duration = (leg["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
             route.legs.append(newLeg)
             
-            route.totalDistanceInMeters += newLeg.distance
-            route.totalDurationInSeconds += newLeg.duration
+            route.totalDistanceInMeters = route.totalDistanceInMeters + newLeg.distance
+            route.totalDurationInSeconds = route.totalDurationInSeconds + newLeg.duration
             let steps = leg["steps"] as! Array<Dictionary<NSObject, AnyObject>>
             for step in steps
             {
@@ -408,15 +407,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     //return the distance between two points
     func distBetweenPoints(start: CLLocationCoordinate2D, end: CLLocationCoordinate2D) -> Double
     {
-        let longdiff = start.longitude - end.longitude
-        let latdiff = start.latitude - end.latitude
-        return sqrt((longdiff * longdiff) + (latdiff * latdiff))
-    }
-    
-    //calculate an adjusted time based on the weather along the route
-    func calculateAdjustedTime()->UInt{
-        let baseTime = routeSets.defaultRoute.totalDurationInSeconds
-
+        let lat1 = start.latitude
+        let lon1 = start.longitude
+        let lat2 = end.latitude
+        let lon2 = end.longitude
+        
+        let R = 6378.137; // Radius of earth in KM
+        let dLat = (lat2 - lat1) * M_PI / 180;
+        let dLon = (lon2 - lon1) * M_PI / 180;
+        var a = sin(dLat/2) * sin(dLat/2)
+        a += cos(lat1 * M_PI / 180) * cos(lat2 * M_PI / 180) *
+            sin(dLon/2) * sin(dLon/2);
+        let c = 2 * atan2(sqrt(a), sqrt(1-a));
+        let d = R * c;
+        return d * 1000; // meters
     }
     
     //add a partitionpoint to the route based on a given step
@@ -567,8 +571,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         routePolyline.tappable = true
         routePolyline.strokeColor = UIColor.blueColor()
         routePolyline.map = mapView
-        var totalRadiusInMeters: Double = 0.0
-        var adjustedRadiusInMeters: Double = 0.0
+        
         
         for item in routeSets.defaultRoute.partitionPoints
         {
@@ -587,11 +590,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 {
                     gmsMarker.title = "Lon: " + weatherData.lon.description + " Lat: " + weatherData.lat.description
                     gmsMarker.snippet = "Weather: " + weatherData.main + " Description: " + weatherData.des + "\nTemp: " + weatherData.temp.description + " Pressure: " + weatherData.pressure.description + " Humidity: " + weatherData.humidity.description + "\nClouds: " + weatherData.clouds.description + " Wind: " + weatherData.wind.description + " Weight: " + weatherData.weight.description
+                    
+                    //Sum up
+                    self.routeSets.defaultRoute.totalRadiusInMeters += Double(item.radius)
+                    self.routeSets.defaultRoute.adjustedRadiusInMeters += (Double(item.radius) / weatherData.weight)
                 }
             })
-            //Sum up
-            totalRadiusInMeters += item.radius
-            adjustedRadiusInMeters += (item.radius / weatherData.weight)
             
             gmsMarker.map = self.mapView
             
@@ -620,8 +624,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 }
             }*/
         }
-        //Adjusted time is proportional to the average weather weight
-        routeSets.defaultRoute.adjustedDurationInSeconds = (round(Double(routeSets.defaultRoute.totalDurationInSeconds) * (adjustedRadiusInMeters / totalRadiusInMeters)))
+        
         selectUIColor = nil
     }
     

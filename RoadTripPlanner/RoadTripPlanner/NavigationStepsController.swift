@@ -52,19 +52,23 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     
     func parseDistance(dist: Int) -> String
     {
+        var toRet: String
+        
         if (dist >= 1000)
         {
-            toRet = String(ceil(dist / 1000))
-            toret = toret + " km"
+            toRet = String(ceil(Double(dist) / 1000))
+            toRet = toRet + " km"
         }
         else
         {
-            var toRet = String(dist)
+            toRet = String(dist)
             toRet = toRet + " m"
         }
+        
+        return toRet
     }
     
-    func parseDuration(dur: Int) -> String
+    func parseDuration(var dur: Int) -> String
     {
         if (dur > 60)
         {
@@ -74,11 +78,11 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
             
             if (hours == 0)
             {
-                return minutes + " minutes"
+                return minutes.description + " minutes"
             }
             else
             {
-                return hours + " h, " + minutes + " m"
+                return hours.description + " h, " + minutes.description + " m"
             }
         }
         else
@@ -98,10 +102,13 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         {
             route = GlobalRouteModel.routeModel
             
+            //Adjusted time is proportional to the average weather weight
+            route.adjustedDurationInSeconds = Int(round(Double(route.totalDurationInSeconds) * (route.adjustedRadiusInMeters / route.totalRadiusInMeters)))
+            
             //add the totals at the top of the view
             self.items.append("Total Distance: " + parseDistance(route.totalDistanceInMeters))
             self.items.append("Total Time: " + parseDuration(route.totalDurationInSeconds))
-            self.items.append("Total Time With Weather: " + parseDuration(adjustedDurationInSeconds))
+            self.items.append("Total Time With Weather: " + parseDuration(route.adjustedDurationInSeconds))
             
             //add the route steps to the view
             for step in route.steps
@@ -128,7 +135,7 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         
         //NGH - wrap overflowing direction lines
-        cell.textLabel?.lineBreakMode = UILineBreakModeWordWrap;
+        cell.textLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
         
         cell.textLabel?.text = self.items[indexPath.row]
         

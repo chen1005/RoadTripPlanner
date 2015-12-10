@@ -15,6 +15,6 @@ class RouteLegs: NSObject{
     var endLocation: CLLocationCoordinate2D!
     var startName: String!
     var endName: String!
-    var distance: UInt!
-    var duration: UInt!
+    var distance: Int!
+    var duration: Int!
 }
