@@ -22,6 +22,49 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
         self.dismissViewControllerAnimated(true, completion:nil)
     }
     
+    func stripHtml(toEdit: String) -> String
+    {
+        var currentChar : Character
+        var index : int
+        
+        var processedStepString = ""
+        var insideTag = false
+        var insideInnerTag = false
+        for (index = 0; index < toEdit.count(); index++)
+        {
+            index = advance(toEdit.startIndex, 1)
+            currentChar = toEdit[index]
+            
+            if (insideTag)
+            {
+                if (currentChar == ">")
+                {
+                    if (insideInnerTag)
+                    {
+                        insideInnerTag = false
+                    }
+                    else
+                    {
+                        insideTag = false
+                    }
+                }
+            }
+            else
+            {
+                if (currentChar == "<")
+                {
+                    insideInnerTag = true
+                    insideTag = true
+                }
+                else
+                {
+                    processedStepString = processedStepString + ch
+                }
+            }
+        }
+        return processedStepString
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,7 +78,7 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
             route = GlobalRouteModel.routeModel
             for step in route.steps
             {
-                self.items.append(step.instructions)
+                self.items.append(stripHtml(step.instructions))
             }
         }
         

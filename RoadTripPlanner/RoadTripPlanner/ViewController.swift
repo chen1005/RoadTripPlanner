@@ -29,7 +29,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         self.presentViewController(tripPlannerController, animated:true, completion:nil)
     }
     
-    @IBAction func routePlannerClick(sender: AnyObject)
+    @IBAction func getDirectionsClick(sender: AnyObject)
     {
         if (route.steps.count > 0)
         {
