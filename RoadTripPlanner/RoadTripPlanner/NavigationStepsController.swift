@@ -16,7 +16,8 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     let uiColors = UIColorModel()
     var route : RouteModel!
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var textHeader: UILabel!
+    
     @IBAction func mapViewTap(sender: AnyObject)
     {
         self.dismissViewControllerAnimated(true, completion:nil)
@@ -111,9 +112,7 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
             route.adjustedDurationInSeconds = Int(round(Double(route.totalDurationInSeconds) * (route.adjustedRadiusInMeters / route.totalRadiusInMeters)))
             
             //add the totals at the top of the view
-            self.items.append("Total Distance: " + parseDistance(route.totalDistanceInMeters))
-            self.items.append("Total Time: " + parseDuration(route.totalDurationInSeconds))
-            self.items.append("Total With Weather: " + parseDuration(route.adjustedDurationInSeconds))
+            textHeader.text = "Total Distance: " + parseDistance(route.totalDistanceInMeters)) + "\n" + "Total Time: " + parseDuration(route.totalDurationInSeconds)) + "\n" + "Total With Weather: " + parseDuration(route.adjustedDurationInSeconds))
             
             //add the route steps to the view
             for step in route.steps
