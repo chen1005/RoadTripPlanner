@@ -179,6 +179,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                     self.searchRoute()
                     self.configureMapAndMarkersForRoute()
                     self.drawRoute()
+                    self.zoomToFitMapPartition()
                 }
                 else {
                     print(status)
@@ -253,7 +254,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         }
         
         if(routeSets.defaultRoute.partitionPoints.count == 1){
-            let location = CLLocationCoordinate2D(latitude: routeSets.defaultRoute.partitionPoints[0].latitude , longitude: routeSets.defaultRoute.partitionPoints[0].longitude)
+            let location = CLLocationCoordinate2D(latitude: routeSets.defaultRoute.partitionPoints[0].location.latitude, longitude: routeSets.defaultRoute.partitionPoints[0].location.longitude)
             mapView.camera = GMSCameraPosition(target: location, zoom: 17, bearing: 0, viewingAngle: 0)
             return
         }
@@ -265,8 +266,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             northEastCoord.longitude = fmin(northEastCoord.longitude, partition.location.longitude)
             northEastCoord.latitude = fmin(northEastCoord.latitude, partition.location.latitude)
             
-            southWestCoord.longitude = fmax(southWestCoord.longitude, partition.longitude)
-            southWestCoord.latitude = fmax(southWestCoord.latitude, partition.latitude)
+            southWestCoord.longitude = fmax(southWestCoord.longitude, partition.location.longitude)
+            southWestCoord.latitude = fmax(southWestCoord.latitude, partition.location.latitude)
             
         }
         let bounds = GMSCoordinateBounds(coordinate: northEastCoord, coordinate: southWestCoord)
