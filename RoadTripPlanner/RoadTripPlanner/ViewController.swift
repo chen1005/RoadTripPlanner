@@ -101,6 +101,66 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             }
             //Update to use waypoints
 
+            
+            self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
+                if success {
+                    self.searchRoute()
+                    self.configureMapAndMarkersForRoute()
+                    self.drawRoute()
+                }
+                else {
+                    print(status)
+                }
+            })
+        }
+        
+        let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
+            
+        }
+        
+        addressAlert.addAction(createRouteAction)
+        addressAlert.addAction(closeAction)
+        
+        presentViewController(addressAlert, animated: true, completion: nil)
+    }
+    
+    func addWayPoints()
+    {
+        let addressAlert = UIAlertController(title: "Create Route", message: "Connect locations with a route:", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.text = "Current Location"
+        }
+        
+        addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            if (self.selectedMarker != nil)
+            {
+                textField.text = self.selectedMarker.title
+            }
+            else
+            {
+                textField.placeholder = "Destination?"
+            }
+        }
+        
+        let createRouteAction = UIAlertAction(title: "Create Route", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
+            var origin = (addressAlert.textFields![0] as UITextField).text! as String
+            var destination = (addressAlert.textFields![1] as UITextField).text! as String
+            
+            if (origin == "Current Location")
+            {
+                origin = self.currentLocation.coordinate.latitude.description + "," + self.currentLocation.coordinate.longitude.description;
+            }
+            
+            for item in self.markerSets.markers
+            {
+                if (self.selectedMarker.position.latitude == item.latitude && self.selectedMarker.position.longitude == item.longitude)
+                {
+                    destination = "place_id:" + item.placeId
+                }
+            }
+            //Update to use waypoints
+            
             self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
                     self.searchRoute()
@@ -183,6 +243,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         else
         {
             selectedMarker = marker;
+            
+            addWayPoints()
         }
         
         return false
@@ -287,25 +349,39 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         route.originAddress = legs[0]["start_address"] as! String
         route.destinationAddress = legs[legs.count - 1]["end_address"] as! String
         
-        route.totalDistanceInMeters = (legs[0]["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
-        route.totalDurationInSeconds = (legs[0]["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
         
-        let steps = legs[0]["steps"] as! Array<Dictionary<NSObject, AnyObject>>
-        
-        for step in steps
-        {
-            let newStep = RouteStep()
-            newStep.distance = (step["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
-            newStep.duration = (step["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
-            let startStepDictionary = step["start_location"] as! Dictionary<NSObject, AnyObject>
-            let endStepDictionary = step["end_location"] as! Dictionary<NSObject, AnyObject>
-            newStep.startLocation = CLLocationCoordinate2DMake(startStepDictionary["lat"] as! Double, startStepDictionary["lng"] as! Double)
-            newStep.endLocation = CLLocationCoordinate2DMake(endStepDictionary["lat"] as! Double, endStepDictionary["lng"] as! Double)
-            newStep.instructions = step["html_instructions"] as! String
+        for leg in legs{
+            let newLeg = RouteLegs()
+            let startLocationDictionary = leg["start_location"] as! Dictionary<NSObject, AnyObject>
+            let endLocationDictionary = leg["end_location"] as! Dictionary<NSObject, AnyObject>
+            newLeg.startLocation = CLLocationCoordinate2DMake(startLocationDictionary["lat"] as! Double, startLocationDictionary["lng"] as! Double)
+            newLeg.endLocation = CLLocationCoordinate2DMake(endLocationDictionary["lat"] as! Double, endLocationDictionary["lng"] as! Double)
+            newLeg.startName = leg["start_address"] as! String
+            newLeg.endName = leg["end_address"] as! String
+            newLeg.distance = (leg["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
+            newLeg.duration = (leg["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
+            route.legs.append(newLeg)
             
-            route.steps.append(newStep)
+            route.totalDistanceInMeters += newLeg.distance
+            route.totalDurationInSeconds += newLeg.duration
+            let steps = leg["steps"] as! Array<Dictionary<NSObject, AnyObject>>
+            for step in steps
+            {
+                
+                let newStep = RouteStep()
+                newStep.distance = (step["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
+                newStep.duration = (step["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
+                let startStepDictionary = step["start_location"] as! Dictionary<NSObject, AnyObject>
+                let endStepDictionary = step["end_location"] as! Dictionary<NSObject, AnyObject>
+                newStep.startLocation = CLLocationCoordinate2DMake(startStepDictionary["lat"] as! Double, startStepDictionary["lng"] as! Double)
+                newStep.endLocation = CLLocationCoordinate2DMake(endStepDictionary["lat"] as! Double, endStepDictionary["lng"] as! Double)
+                newStep.instructions = step["html_instructions"] as! String
+                
+                route.steps.append(newStep)
+            }
+            
         }
-        
+      
         let distanceInKilometers: Double = Double(route.totalDistanceInMeters / 1000)
         route.totalDistance = "Total Distance: \(distanceInKilometers) Km"
         
@@ -318,7 +394,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         route.totalDuration = "Duration: \(days) d, \(remainingHours) h, \(remainingMins) mins, \(remainingSecs) secs"
         
-        calculateWayPoints(route)
+        partitionRoute(route)
 
         routeSets.defaultRoute = route
         GlobalRouteModel.globalRoute = route
@@ -350,7 +426,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     }
     
     //use the list of steps stored in the route to generate a list of waypoints to search
-    func calculateWayPoints(route: RouteModel)
+    func partitionRoute(route: RouteModel)
     {
         //constant representing the overflow area of a search circle
         let overflowFactor = 1.1
