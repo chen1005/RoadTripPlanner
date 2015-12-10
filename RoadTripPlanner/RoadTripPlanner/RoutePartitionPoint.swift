@@ -1,5 +1,5 @@
 //
-//  RouteWaypoint.swift
+//  RoutePartitionPoint.swift
 //  RoadTripPlanner
 //
 //  Created by Rick Chen on 15/12/9.
@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class RouteWaypoint: NSObject
+class RoutePartionPoint: NSObject
 {
     var location:CLLocationCoordinate2D!
     var radius:Int!

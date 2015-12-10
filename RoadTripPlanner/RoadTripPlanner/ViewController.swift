@@ -20,6 +20,35 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         presentViewController(gpaViewController, animated: true, completion: nil)
     }*/
     
+    // Initialize location to Purdue Univerisity - Zhuo Chen
+    var currentLocation = CLLocation(latitude: 40.423705, longitude: -86.921195)
+    // Initialize searching radius - Zhuo Chen
+    var searchRadius = 5000
+    // Create location manager - Zhuo Chen  
+    let locationManager = CLLocationManager()
+    // Create Map Tasks controller - Zhuo Chen
+    let mapTasks = MapTasksController()
+    // Create Weather controller - Zhuo Chen
+    let weatherController = WeatherController()
+    // Create Google Place Autocomplete controller - Zhuo Chen
+    let gpaViewController = GooglePlacesAutocomplete(apiKey: "AIzaSyAEuoPxT43YjP704p9Tfmhp_1AeZNcMERM", placeType: .Address)
+    let tripPlannerController = TripPlannerController()
+    let navigationStepsController = NavigationStepsController()
+    
+    // Create MarkerSets Model - Zhuo Chen
+    var markerSets = MarkerSets()
+    // Create RouteSets Model - Zhuo Chen
+    var routeSets = RouteSets()
+    // Current Selected Marker - Zhuo Chen
+    var selectedMarker: GMSMarker!
+    // Current Selected UIColor - Zhuo Chen
+    var selectUIColor: UIColor!
+    
+    var originMarker: GMSMarker!
+    
+    var destinationMarker: GMSMarker!
+    
+    var routePolyline: GMSPolyline!
     
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var searchText: UITextField!
@@ -177,35 +206,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         presentViewController(addressAlert, animated: true, completion: nil)
     }
     
-    // Initialize location to Purdue Univerisity - Zhuo Chen
-    var currentLocation = CLLocation(latitude: 40.423705, longitude: -86.921195)
-    // Initialize searching radius - Zhuo Chen
-    var searchRadius = 5000
-    // Create location manager - Zhuo Chen  
-    let locationManager = CLLocationManager()
-    // Create Map Tasks controller - Zhuo Chen
-    let mapTasks = MapTasksController()
-    // Create Weather controller - Zhuo Chen
-    let weatherController = WeatherController()
-    // Create Google Place Autocomplete controller - Zhuo Chen
-    let gpaViewController = GooglePlacesAutocomplete(apiKey: "AIzaSyAEuoPxT43YjP704p9Tfmhp_1AeZNcMERM", placeType: .Address)
-    let tripPlannerController = TripPlannerController()
-    let navigationStepsController = NavigationStepsController()
     
-    // Create MarkerSets Model - Zhuo Chen
-    var markerSets = MarkerSets()
-    // Create RouteSets Model - Zhuo Chen
-    var routeSets = RouteSets()
-    // Current Selected Marker - Zhuo Chen
-    var selectedMarker: GMSMarker!
-    // Current Selected UIColor - Zhuo Chen
-    var selectUIColor: UIColor!
-    
-    var originMarker: GMSMarker!
-    
-    var destinationMarker: GMSMarker!
-    
-    var routePolyline: GMSPolyline!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -404,8 +405,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         return sqrt((longdiff * longdiff) + (latdiff * latdiff))
     }
     
-    //add a waypoint to the route based on a given step
-    func addWaypointGivenStep(route: RouteModel, processedStep: RouteStep, overflowFactor: Double)
+    //add a partitionpoint to the route based on a given step
+    func addPartitionPointGivenStep(route: RouteModel, processedStep: RouteStep, overflowFactor: Double)
     {
         //find the center
         let centerLong = (processedStep.startLocation.longitude + processedStep.endLocation.longitude) / 2
@@ -414,14 +415,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         //find the radius
         let searchRadius = Int(distBetweenPoints(processedStep.startLocation, end: processedStep.endLocation) * overflowFactor / 2)
         
-        //append this data to route.waypoints
-        let waypoint = RouteWaypoint()
-        waypoint.radius = searchRadius
-        waypoint.location = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLong)
-        route.wayPoints.append(waypoint)
+        //append this data to route.partionPoints
+        let partitionPoint = RoutePartitionPoint()
+        partitionPoint.radius = searchRadius
+        partitionPoint.location = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLong)
+        route.partitionPoints.append(partitionPoint)
     }
     
-    //use the list of steps stored in the route to generate a list of waypoints to search
+    //use the list of steps stored in the route to generate a list of partitionPoints to search
     func partitionRoute(route: RouteModel)
     {
         //constant representing the overflow area of a search circle
@@ -462,8 +463,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                     processedStep.endLocation = subStepEndLoc
                     processedStep.distance = Int(ceil(distBetweenPoints(processedStep.startLocation, end: processedStep.endLocation)))
                     
-                    //add a waypoint based on the processed step
-                    addWaypointGivenStep(route, processedStep: processedStep, overflowFactor: overflowFactor)
+                    //add a partitionpoint based on the processed step
+                    addPartitionPointGivenStep(route, processedStep: processedStep, overflowFactor: overflowFactor)
                 }
             }
             else
@@ -489,8 +490,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                     x = furthestStep
                 }
             
-                //add a waypoint based on the processed step
-                addWaypointGivenStep(route, processedStep: processedStep, overflowFactor: overflowFactor)
+                //add a partitionpoint based on the processed step
+                addPartitionPointGivenStep(route, processedStep: processedStep, overflowFactor: overflowFactor)
             }
         }
     }
@@ -553,7 +554,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         routePolyline.strokeColor = UIColor.blueColor()
         routePolyline.map = mapView
         
-        for item in routeSets.defaultRoute.wayPoints
+        for item in routeSets.defaultRoute.partitionPoints
         {
             let position = CLLocationCoordinate2DMake(item.location.latitude, item.location.longitude)
             let gmsMarker = GMSMarker(position: position)
@@ -608,6 +609,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     //Takes two MKMapItem objects corresponding to the start and end points
     //Can be modified to take points in lat, lon form
     //returns travel time in seconds
+    
+    /* Old code for AppleMaps
     func calculateETA(srcPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D) -> NSInteger {
         let request = MKDirectionsRequest()
         let src = MKMapItem(placemark: MKPlacemark(coordinate: srcPnt, addressDictionary: nil))
@@ -632,6 +635,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         return ret
     }
+    */
     
     //John Shetler - function to return the additional travel time resulting from
     //adding "newPnt" to the route
@@ -639,6 +643,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     //src and dst should be the stops that precede and follow newPnt respectively
     //If stops are removed or reordered, estimated time needs to be recalculated
     //returns additional travel time in seconds
+   
+    /* Old code for AppleMaps
     func calculateAdditionalTime(srcPnt: CLLocationCoordinate2D, newPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D)->NSInteger{
         let originalTime = calculateETA(srcPnt, dstPnt: dstPnt)
         let startToNew = calculateETA(srcPnt, dstPnt: newPnt)
@@ -646,14 +652,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         let modifiedTime = startToNew + newToEnd
         return (modifiedTime - originalTime)
     }
+    */
     
     //Nick Houser- function for route search
     //takes search string and array of location coordinates (which represent current route)
     //please note that if the points passed to this function are too far apart
-    //some waypoints will be missed (not added to the map)
+    //some interestpoints will be missed (not added to the map)
     //this is unavoidable as the MKLocalSearch cannot return more than 10 results
     //the solution is simply to pass this method a list of points close enough together that
-    //a local search between any two of the input points does not contain more than 10 waypoints
+    //a local search between any two of the input points does not contain more than 10 interest points
     /*func searchRoute(place: String, points: [CLLocationCoordinate2D], completionHandler: (success: Bool) -> Void)
     {
         //to avoid exceptions if array is empty (should never happen)
