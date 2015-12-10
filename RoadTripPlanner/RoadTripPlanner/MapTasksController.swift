@@ -130,9 +130,9 @@ class MapTasksController: NSObject
                 directionsURLString = directionsURLString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
                 
                 
-                print(directionsURLString)
-                
                 let directionsURL = NSURL(string: directionsURLString)
+                
+                print(directionsURL)
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     let directionsData = NSData(contentsOfURL: directionsURL!)
@@ -151,6 +151,7 @@ class MapTasksController: NSObject
                         completionHandler(status: status, success: false)
                     }
                 })
+                
             }
             else {
                 completionHandler(status: "Destination is nil.", success: false)

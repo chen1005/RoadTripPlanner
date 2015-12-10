@@ -300,8 +300,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             newStep.duration = (step["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
             let startStepDictionary = step["start_location"] as! Dictionary<NSObject, AnyObject>
             let endStepDictionary = step["end_location"] as! Dictionary<NSObject, AnyObject>
-            newStep.startLocation = CLLocationCoordinate2DMake(startStepDictionary["lat"] as! Double, startLocationDictionary["lng"] as! Double)
-            newStep.endLocation = CLLocationCoordinate2DMake(endStepDictionary["lat"] as! Double, startLocationDictionary["lng"] as! Double)
+            newStep.startLocation = CLLocationCoordinate2DMake(startStepDictionary["lat"] as! Double, startStepDictionary["lng"] as! Double)
+            newStep.endLocation = CLLocationCoordinate2DMake(endStepDictionary["lat"] as! Double, endStepDictionary["lng"] as! Double)
             newStep.instructions = step["html_instructions"] as! String
             
             route.steps.append(newStep)
@@ -327,7 +327,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     //return the distance between two points
     func distBetweenPoints(start: CLLocationCoordinate2D, end: CLLocationCoordinate2D) -> Double
     {
-        return sqrt((start.longitude - end.longitude)^2 + (start.latitude - end.latitude)^2)
+        let longdiff = start.longitude - end.longitude
+        let latdiff = start.latitude - end.latitude
+        return sqrt((longdiff * longdiff) + (latdiff * latdiff))
     }
     
     //add a waypoint to the route based on a given step
@@ -338,7 +340,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         let centerLat = (processedStep.startLocation.latitude + processedStep.endLocation.latitude) / 2
         
         //find the radius
-        let searchRadius = Int(distBetweenPoints(start: processedStep.startLocation, end: processedStep.endLocation) * overflowFactor / 2)
+        let searchRadius = Int(distBetweenPoints(processedStep.startLocation, end: processedStep.endLocation) * overflowFactor / 2)
         
         //append this data to route.waypoints
         let waypoint = RouteWaypoint()
@@ -353,20 +355,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         //constant representing the overflow area of a search circle
         let overflowFactor = 1.1
         //constant representing the minimum distance required for a step in meters
-        let minstep = 1000
+        let minstep = 10000
         //constant representing the maximum distance for a step in meters
         let maxstep = 100000 / overflowFactor
         
         //for each step along the route
-        for (var x = 0; x < route.steps.length; x++)
+        for (var x = 0; x < route.steps.count; x++)
         {
-            let processedStep = route.steps[x]
+            var processedStep = route.steps[x]
             
             //process overly long steps
-            if (route.steps[x].distance > maxstep)
+            if (Double(route.steps[x].distance) > maxstep)
             {
                 //set up variables
-                let numSubSteps = ceil(route.steps[x].distance / maxSearchDiameter)
+                let numSubSteps = ceil(Double(route.steps[x].distance) / maxstep)
                 let delta = 1.0 / numSubSteps
                 let stepstartloc = route.steps[x].startLocation
                 let stependloc = route.steps[x].endLocation
@@ -374,7 +376,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 let latDiff = (stependloc.latitude - stepstartloc.latitude) * delta
                 
                 //for each substep
-                var y = 0
+                var y = 0.0
                 while (y < numSubSteps)
                 {
                     //get the substep start and end location
@@ -383,23 +385,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                     let subStepEndLoc = CLLocationCoordinate2D(latitude: stepstartloc.latitude + (latDiff * y), longitude: stepstartloc.longitude + (lngDiff * y))
                     
                     //set up a processed step with those locations and the distance between them
-                    let processedStep = RouteStep()
+                    processedStep = RouteStep()
                     processedStep.startLocation = subStepStartLoc
                     processedStep.endLocation = subStepEndLoc
-                    processedStep.distance = distBetweenPoints(start: processedStep.startLocation, end: processedStep.endLocation)
+                    processedStep.distance = Int(ceil(distBetweenPoints(processedStep.startLocation, end: processedStep.endLocation)))
                     
                     //add a waypoint based on the processed step
-                    addWaypointGivenStep(route: route, processedStep: processedStep, overflowFactor: overflowFactor)
+                    addWaypointGivenStep(route, processedStep: processedStep, overflowFactor: overflowFactor)
                 }
             }
             else
             {
                 //process overly short steps
-                let sumDistance = 0
+                var sumDistance = 0
                 var furthestStep = x - 1
                 
                 //find the furthest step which has less total distance than the minimum step
-                while (sumDistance < minstep && furthestStep < route.steps.length)
+                while (sumDistance < minstep && furthestStep < route.steps.count - 1)
                 {
                     furthestStep = furthestStep + 1
                     sumDistance = sumDistance + route.steps[furthestStep].distance
@@ -408,15 +410,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 //if the furthest step is not the current step make a virtual step using a straight line approximation of the intermediate steps
                 if (furthestStep != x)
                 {
-                    let processedStep = RouteStep()
-                    processedStep.startLocation = route.steps[x].start_location
-                    processedStep.endLocation = route.steps[furthestStep].end_location
-                    processedStep.distance = distBetweenPoints(start: processedStep.startLocation, end: processedStep.endLocation)
+                    processedStep = RouteStep()
+                    processedStep.startLocation = route.steps[x].startLocation
+                    processedStep.endLocation = route.steps[furthestStep].endLocation
+                    processedStep.distance = Int(ceil(distBetweenPoints(processedStep.startLocation, end: processedStep.endLocation)))
                     x = furthestStep
                 }
             
                 //add a waypoint based on the processed step
-                addWaypointGivenStep(route: route, processedStep: processedStep, overflowFactor: overflowFactor)
+                addWaypointGivenStep(route, processedStep: processedStep, overflowFactor: overflowFactor)
             }
         }
     }
@@ -481,22 +483,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         for item in routeSets.defaultRoute.wayPoints
         {
-            //let query = "lat=" + Int(item.latitude).description + "&lon=" + Int(item.longitude).description
-            //let weather = weatherController.getCurrentWeather(query)
             let position = CLLocationCoordinate2DMake(item.location.latitude, item.location.longitude)
             let gmsMarker = GMSMarker(position: position)
             gmsMarker.icon = GMSMarker.markerImageWithColor(UIColor.grayColor())
-            //gmsMarker.title = weather.icode
-            //gmsMarker.snippet = "Clouds: " + weather.clouds.description + " Rains: " + weather.rain.description + " Wind: " + weather.wind.description + " Weights: " + weather.weight.description
+            
+            let query = "lat=" + item.location.latitude.description + "&lon=" + item.location.longitude.description
+            let weatherData = WeatherModel()
+            weatherController.getCurrentWeather(query, weatherData: weatherData, completionHandler: {(status, success)-> Void in
+                if (!success)
+                {
+                    print(status)
+                }
+                else
+                {
+                    gmsMarker.title = "Lon: " + weatherData.lon.description + " Lat: " + weatherData.lat.description
+                    gmsMarker.snippet = "Weather: " + weatherData.main + " Description: " + weatherData.des + "\nTemp: " + weatherData.temp.description + " Pressure: " + weatherData.pressure.description + " Humidity: " + weatherData.humidity.description + "\nClouds: " + weatherData.clouds.description + " Wind: " + weatherData.wind.description + " Weights: " + weatherData.weight.description
+                }
+            })
+            
             gmsMarker.map = self.mapView
             
-            if (RouteInterestPointsModel.interestPoints != nil)
+            /*if (RouteInterestPointsModel.interestPoints != nil)
             {
                 for (var i = 0; i < RouteInterestPointsModel.interestPoints.count; i++)
                 {
                     let query = RouteInterestPointsModel.interestPoints[i]
                     selectUIColor = RouteInterestPointsModel.colors[i]
-                
+            
                     self.mapTasks.textSearch(query, location: position, radius: searchRadius, withCompletionHandler: { (status, success) -> Void in
                         if (!success)
                         {
@@ -513,7 +526,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                         }
                     })
                 }
-            }
+            }*/
         }
         
         selectUIColor = nil
@@ -531,7 +544,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         request.destination = dst
         request.requestsAlternateRoutes = false
         request.transportType = MKDirectionsTransportType.Automobile
-        var ret = NSInteger()
+        let ret = NSInteger()
         let directions = MKDirections(request: request)
         
         /*directions.calculateETAWithCompletionHandler{response, error in
