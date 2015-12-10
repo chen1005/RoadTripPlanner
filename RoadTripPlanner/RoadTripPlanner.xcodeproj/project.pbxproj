@@ -32,6 +32,7 @@
 		04F20FCF1BED1BF300F99E21 /* UIColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F20FCE1BED1BF300F99E21 /* UIColorModel.swift */; };
 		04F20FD11BED1F3900F99E21 /* RouteInterestPointsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F20FD01BED1F3900F99E21 /* RouteInterestPointsModel.swift */; };
 		F0F484580C8A05F306FB9016 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00AC8DAEFAF2E050B3D69A6 /* Pods.framework */; };
+		FBBC69861C19D24F00A533A6 /* RouteStops.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBBC69851C19D24F00A533A6 /* RouteStops.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		73DC4C5CE03374826E19039B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A597DC8E9E9CAE44817DC3EC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		B00AC8DAEFAF2E050B3D69A6 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBBC69851C19D24F00A533A6 /* RouteStops.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteStops.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 				04F20FD01BED1F3900F99E21 /* RouteInterestPointsModel.swift */,
 				045115471C18E6170009592A /* RouteStep.swift */,
 				045115491C18E8540009592A /* RouteWaypoint.swift */,
+				FBBC69851C19D24F00A533A6 /* RouteStops.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -381,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				044731F01BEC1A9F00367494 /* RouteSets.swift in Sources */,
+				FBBC69861C19D24F00A533A6 /* RouteStops.swift in Sources */,
 				04048AE81BC720F0006B7BD7 /* MarkerModel.swift in Sources */,
 				045115481C18E6170009592A /* RouteStep.swift in Sources */,
 				04048AEA1BC744C6006B7BD7 /* MarkerSets.swift in Sources */,

@@ -22,6 +22,7 @@ class RouteModel: NSObject
     var totalDuration: String!
     var wayPoints = Array<RouteWaypoint>()
     var steps = Array<RouteStep>()
+    var stops = Array<RouteStops>()
     
     override init()
     {

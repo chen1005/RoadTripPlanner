@@ -93,7 +93,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             }
             //Update to use waypoints
 
-
+            
             self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
                     self.searchRoute()
@@ -279,6 +279,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         route.originAddress = legs[0]["start_address"] as! String
         route.destinationAddress = legs[legs.count - 1]["end_address"] as! String
         
+        /*
+        for leg in legs{
+            var stop = RouteStop()
+            stop.location =
+            stop.name =
+            stop.type =
+        route.
+        }
+        */
         route.totalDistanceInMeters = (legs[0]["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
         route.totalDurationInSeconds = (legs[0]["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
         
