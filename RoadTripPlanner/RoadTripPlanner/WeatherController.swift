@@ -26,44 +26,33 @@ class WeatherController: NSObject{
     //Zipcode:      "zip=47906"
 
 
-func getCurrentWeather(query: String!, completionHandler: ((status: String, success: Bool)->Void))->WeatherModel{
+    func getCurrentWeather(query: String!, weatherData: WeatherModel, completionHandler: ((status: String, success: Bool)->Void)){
         
-        let weatherData: WeatherModel = WeatherModel()
-        var queryURLString = baseURL + curWeather + query + apiKey
-        queryURLString = queryURLString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let queryURLString = baseURL + curWeather + query + apiKey
         let queryURL = NSURL(string: queryURLString)
+        print(queryURL)
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
             let weatherResultsData = NSData(contentsOfURL: queryURL!)
             var status: String
-            if let dictionary: Dictionary<NSObject, AnyObject> = ((try! NSJSONSerialization.JSONObjectWithData(weatherResultsData!, options: NSJSONReadingOptions.MutableContainers)) as! Dictionary<NSObject, AnyObject>){
-            
+            let dictionary: Dictionary<NSObject, AnyObject> = ((try! NSJSONSerialization.JSONObjectWithData(weatherResultsData!, options: NSJSONReadingOptions.MutableContainers)) as! Dictionary<NSObject, AnyObject>)
             status = "OK"
         
-                let coord = (dictionary["coord"] as! Dictionary<NSObject, AnyObject>)
-                let weather = (dictionary["weather"] as! Dictionary<NSObject, AnyObject>)
-                let rain = (dictionary["rain"] as! Dictionary<NSObject, AnyObject>)
-                let wind = (dictionary["wind"] as! Dictionary<NSObject, AnyObject>)
+            let coord = (dictionary["coord"] as! Dictionary<NSObject, AnyObject>)
+            let weather = (dictionary["weather"] as! Dictionary<NSObject, AnyObject>)
+            let rain = (dictionary["rain"] as! Dictionary<NSObject, AnyObject>)
+            let wind = (dictionary["wind"] as! Dictionary<NSObject, AnyObject>)
                 
-                weatherData.setLat(coord["lat"] as! Int)
-                weatherData.setLon(coord["lon"] as! Int)
-                weatherData.setWCode(weather["id"] as! String)
-                weatherData.setIcode(weather["icon"] as! String)
-                weatherData.setRain(rain["3h"] as! Double)
-                weatherData.setWind(wind["speed"] as! Double)
-                weatherData.setWeight()
+            weatherData.setLat(coord["lat"] as! Int)
+            weatherData.setLon(coord["lon"] as! Int)
+            weatherData.setWCode(weather["id"] as! String)
+            weatherData.setIcode(weather["icon"] as! String)
+            weatherData.setRain(rain["3h"] as! Double)
+            weatherData.setWind(wind["speed"] as! Double)
+            weatherData.setWeight()
                 
-                
-                completionHandler(status: status, success: true)
-            }else{
-                status = "NO DATA"
-                completionHandler(status: status, success: false)
-            }
+            completionHandler(status: status, success: true)
         })
-        
-        //return weather
-        return weatherData
     }
 
 

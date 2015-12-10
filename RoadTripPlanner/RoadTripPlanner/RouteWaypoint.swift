@@ -12,5 +12,5 @@ import MapKit
 class RouteWaypoint: NSObject
 {
     var location:CLLocationCoordinate2D!
-    var radius:Double!
+    var radius:Int!
 }
