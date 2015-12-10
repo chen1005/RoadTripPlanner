@@ -19,15 +19,6 @@
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5p-hV-FQr" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AxF-oH-0qv" userLabel="Route Calculate">
-                                        <rect key="frame" x="8" y="593" width="114" height="30"/>
-                                        <state key="normal" title="Get Directions"/>
-                                        <connections>
-                                            <action selector="routeCalculator:" destination="BYZ-38-t0r" eventType="touchDown" id="E1c-3s-SXQ"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bUb-6v-3gu">
@@ -57,6 +48,13 @@
                                 <state key="normal" title="Route Calculate"/>
                                 <connections>
                                     <action selector="routeCalculator:" destination="BYZ-38-t0r" eventType="touchDown" id="edI-Fu-64C"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AxF-oH-0qv" userLabel="Route Calculate">
+                                <rect key="frame" x="9" y="603" width="114" height="30"/>
+                                <state key="normal" title="Get Directions"/>
+                                <connections>
+                                    <action selector="getDirectionsClick:" destination="BYZ-38-t0r" eventType="touchDown" id="DMJ-V0-NpI"/>
                                 </connections>
                             </button>
                         </subviews>
