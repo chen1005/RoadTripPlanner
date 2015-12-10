@@ -279,34 +279,38 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         route.originAddress = legs[0]["start_address"] as! String
         route.destinationAddress = legs[legs.count - 1]["end_address"] as! String
         
-        /*
+        
         for leg in legs{
-            var stop = RouteStop()
-            stop.location =
-            stop.name =
-            stop.type =
-        route.
-        }
-        */
-        route.totalDistanceInMeters = (legs[0]["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
-        route.totalDurationInSeconds = (legs[0]["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
-        
-        let steps = legs[0]["steps"] as! Array<Dictionary<NSObject, AnyObject>>
-        
-        for step in steps
-        {
-            let newStep = RouteStep()
-            newStep.distance = (step["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
-            newStep.duration = (step["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
-            let startStepDictionary = step["start_location"] as! Dictionary<NSObject, AnyObject>
-            let endStepDictionary = step["end_location"] as! Dictionary<NSObject, AnyObject>
-            newStep.startLocation = CLLocationCoordinate2DMake(startStepDictionary["lat"] as! Double, startStepDictionary["lng"] as! Double)
-            newStep.endLocation = CLLocationCoordinate2DMake(endStepDictionary["lat"] as! Double, endStepDictionary["lng"] as! Double)
-            newStep.instructions = step["html_instructions"] as! String
+            let newLeg = RouteLegs()
+            let startLocationDictionary = leg["start_location"] as! Dictionary<NSObject, AnyObject>
+            let endLocationDictionary = leg["end_location"] as! Dictionary<NSObject, AnyObject>
+            newLeg.startLocation = CLLocationCoordinate2DMake(startLocationDictionary["lat"] as! Double, locationDictionary["lng"] as! Double)
+            newLeg.endLocation = CLLocationCoordinate2DMake(endLocationDictionary["lat"] as! Double, locationDictionary["lng"] as! Double)
+            newLeg.startName = leg["start_address"]
+            newLeg.endName = leg["end_address"]
+            newLeg.distance = (leg["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
+            newLeg.duration = (leg["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! UInt
+            route.legs.append(newLeg)
             
-            route.steps.append(newStep)
+            route.totalDistanceInMeters += newLeg.distance
+            route.totalDurationInSeconds += newLeg.duration
+            for step in steps
+            {
+                let steps = leg["steps"] as! Array<Dictionary<NSObject, AnyObject>>
+                let newStep = RouteStep()
+                newStep.distance = (step["distance"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
+                newStep.duration = (step["duration"] as! Dictionary<NSObject, AnyObject>)["value"] as! Int
+                let startStepDictionary = step["start_location"] as! Dictionary<NSObject, AnyObject>
+                let endStepDictionary = step["end_location"] as! Dictionary<NSObject, AnyObject>
+                newStep.startLocation = CLLocationCoordinate2DMake(startStepDictionary["lat"] as! Double, startStepDictionary["lng"] as! Double)
+                newStep.endLocation = CLLocationCoordinate2DMake(endStepDictionary["lat"] as! Double, endStepDictionary["lng"] as! Double)
+                newStep.instructions = step["html_instructions"] as! String
+                
+                route.steps.append(newStep)
+            }
+            
         }
-        
+      
         let distanceInKilometers: Double = Double(route.totalDistanceInMeters / 1000)
         route.totalDistance = "Total Distance: \(distanceInKilometers) Km"
         
