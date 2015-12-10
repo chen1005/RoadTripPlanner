@@ -254,6 +254,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         return false
     }
     
+    func zoomToFitMapPartition(){
+        
+        if(routeSets.defaultRoute.partitionPoints.count == 0){
+            return
+        }
+        
+        if(routeSets.defaultRoute.partitionPoints.count == 1){
+            let location = CLLocationCoordinate2D(latitude: routeSets.defaultRoute.partitionPoints[0].latitude , longitude: routeSets.defaultRoute.partitionPoints[0].longitude)
+            mapView.camera = GMSCameraPosition(target: location, zoom: 17, bearing: 0, viewingAngle: 0)
+            return
+        }
+        
+        var northEastCoord = CLLocationCoordinate2D(latitude: 90, longitude: 180)
+        var southWestCoord = CLLocationCoordinate2D(latitude: -90, longitude: -180)
+        
+        for partition in routeSets.defaultRoute.partitionPoints{
+            northEastCoord.longitude = fmin(northEastCoord.longitude, partition.location.longitude)
+            northEastCoord.latitude = fmin(northEastCoord.latitude, partition.location.latitude)
+            
+            southWestCoord.longitude = fmax(southWestCoord.longitude, partition.longitude)
+            southWestCoord.latitude = fmax(southWestCoord.latitude, partition.latitude)
+            
+        }
+        let bounds = GMSCoordinateBounds(coordinate: northEastCoord, coordinate: southWestCoord)
+        self.mapView.animateWithCameraUpdate(GMSCameraUpdate.fitBounds(bounds, withPadding: 30.0))
+        
+    }
+    
     func zoomToFitMapMarkers()
     {
         if(self.markerSets.markers.count == 0)
@@ -281,7 +309,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             southWestCoord.longitude = fmax(southWestCoord.longitude, marker.longitude)
             southWestCoord.latitude = fmax(southWestCoord.latitude, marker.latitude)
         }
-
+        
         let bounds = GMSCoordinateBounds(coordinate: northEastCoord, coordinate: southWestCoord)
         self.mapView.animateWithCameraUpdate(GMSCameraUpdate.fitBounds(bounds, withPadding: 30.0))
     }
