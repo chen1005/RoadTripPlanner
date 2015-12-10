@@ -61,7 +61,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             }
             //Update to use waypoints
             
-            self.mapTasks.getDirections(origin, destination: destination, waypoints: wayPoints, travelMode: nil, completionHandler: { (status, success) -> Void in
+            self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
                     self.searchRoute()
                     self.configureMapAndMarkersForRoute()
@@ -151,9 +151,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 }
             }
             //Update to use waypoints
-
+            var wayPoints = Array<String>()
+            wayPoints.append("Springfield,IL")
             
-            self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
+            self.mapTasks.getDirections(origin, destination: destination, waypoints: wayPoints, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
                     self.searchRoute()
                     self.configureMapAndMarkersForRoute()
