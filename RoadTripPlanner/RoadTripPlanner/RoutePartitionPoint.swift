@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class RoutePartionPoint: NSObject
+class RoutePartitionPoint: NSObject
 {
     var location:CLLocationCoordinate2D!
     var radius:Int!
