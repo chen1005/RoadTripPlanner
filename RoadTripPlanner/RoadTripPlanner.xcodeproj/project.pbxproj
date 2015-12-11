@@ -20,6 +20,10 @@
 		044731F01BEC1A9F00367494 /* RouteSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044731EF1BEC1A9F00367494 /* RouteSets.swift */; };
 		045115481C18E6170009592A /* RouteStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045115471C18E6170009592A /* RouteStep.swift */; };
 		0451154A1C18E8540009592A /* RoutePartitionPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045115491C18E8540009592A /* RoutePartitionPoint.swift */; };
+		0456E9DA1C1A60070013190E /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0456E9D81C1A60070013190E /* CustomTableViewCell.swift */; };
+		0456E9DB1C1A60070013190E /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0456E9D91C1A60070013190E /* CustomTableViewCell.xib */; };
+		0456E9DD1C1AAA3F0013190E /* SphereMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0456E9DC1C1AAA3F0013190E /* SphereMenuDelegate.swift */; };
+		0456E9DF1C1ADC170013190E /* GlobalWaypoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0456E9DE1C1ADC170013190E /* GlobalWaypoints.swift */; };
 		046D53461BED4A6B009F0FEB /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 046D53451BED4A6B009F0FEB /* launch.png */; };
 		049B24101C1A289700CAACAE /* WaypointController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049B240E1C1A289700CAACAE /* WaypointController.swift */; };
 		049B24111C1A289700CAACAE /* WaypointController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049B240F1C1A289700CAACAE /* WaypointController.xib */; };
@@ -66,6 +70,10 @@
 		044731EF1BEC1A9F00367494 /* RouteSets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteSets.swift; sourceTree = "<group>"; };
 		045115471C18E6170009592A /* RouteStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteStep.swift; sourceTree = "<group>"; };
 		045115491C18E8540009592A /* RoutePartitionPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutePartitionPoint.swift; sourceTree = "<group>"; };
+		0456E9D81C1A60070013190E /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		0456E9D91C1A60070013190E /* CustomTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
+		0456E9DC1C1AAA3F0013190E /* SphereMenuDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphereMenuDelegate.swift; sourceTree = "<group>"; };
+		0456E9DE1C1ADC170013190E /* GlobalWaypoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalWaypoints.swift; sourceTree = "<group>"; };
 		046D53451BED4A6B009F0FEB /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		049B240E1C1A289700CAACAE /* WaypointController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaypointController.swift; sourceTree = "<group>"; };
 		049B240F1C1A289700CAACAE /* WaypointController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WaypointController.xib; sourceTree = "<group>"; };
@@ -188,6 +196,7 @@
 				045115471C18E6170009592A /* RouteStep.swift */,
 				045115491C18E8540009592A /* RoutePartitionPoint.swift */,
 				FBBC69851C19D24F00A533A6 /* RouteLegs.swift */,
+				0456E9DE1C1ADC170013190E /* GlobalWaypoints.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -213,6 +222,9 @@
 				3A11DE451C19DB1D00AEB911 /* NavigationStepsController.xib */,
 				049B240E1C1A289700CAACAE /* WaypointController.swift */,
 				049B240F1C1A289700CAACAE /* WaypointController.xib */,
+				0456E9D81C1A60070013190E /* CustomTableViewCell.swift */,
+				0456E9D91C1A60070013190E /* CustomTableViewCell.xib */,
+				0456E9DC1C1AAA3F0013190E /* SphereMenuDelegate.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -325,6 +337,7 @@
 				04DC2B371BC833B800551FD4 /* icon.png in Resources */,
 				04F20FCD1BED0D1C00F99E21 /* TripPlannerController.xib in Resources */,
 				049B24111C1A289700CAACAE /* WaypointController.xib in Resources */,
+				0456E9DB1C1A60070013190E /* CustomTableViewCell.xib in Resources */,
 				04048AC91BC608AE006B7BD7 /* Main.storyboard in Resources */,
 				04048ACE1BC608AE006B7BD7 /* LaunchScreen.xib in Resources */,
 				04048ACB1BC608AE006B7BD7 /* Images.xcassets in Resources */,
@@ -398,9 +411,12 @@
 				04048AE81BC720F0006B7BD7 /* MarkerModel.swift in Sources */,
 				045115481C18E6170009592A /* RouteStep.swift in Sources */,
 				04048AEA1BC744C6006B7BD7 /* MarkerSets.swift in Sources */,
+				0456E9DF1C1ADC170013190E /* GlobalWaypoints.swift in Sources */,
 				3A11DE441C19DB0600AEB911 /* NavigationStepsController.swift in Sources */,
+				0456E9DA1C1A60070013190E /* CustomTableViewCell.swift in Sources */,
 				04DC2B341BC82CA100551FD4 /* WeatherController.swift in Sources */,
 				04F20FD11BED1F3900F99E21 /* RouteInterestPointsModel.swift in Sources */,
+				0456E9DD1C1AAA3F0013190E /* SphereMenuDelegate.swift in Sources */,
 				044731EE1BEC16A500367494 /* RouteModel.swift in Sources */,
 				04DC2B351BC82CA100551FD4 /* WeatherModel.swift in Sources */,
 				049B24101C1A289700CAACAE /* WaypointController.swift in Sources */,

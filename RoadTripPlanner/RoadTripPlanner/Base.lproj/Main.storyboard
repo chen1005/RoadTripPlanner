@@ -21,56 +21,29 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bUb-6v-3gu">
-                                <rect key="frame" x="16" y="20" width="339" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="textFieldReturn:" destination="BYZ-38-t0r" eventType="editingDidEndOnExit" id="cY4-q5-JYe"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bo0-4N-tva">
-                                <rect key="frame" x="122" y="629" width="114" height="30"/>
-                                <state key="normal" title="Add Waypoints"/>
-                                <connections>
-                                    <action selector="addWayPointsClick:" destination="BYZ-38-t0r" eventType="touchDown" id="hV7-Mw-foj"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ysw-B0-4Em">
-                                <rect key="frame" x="16" y="629" width="99" height="30"/>
-                                <state key="normal" title="Route Planner"/>
-                                <connections>
-                                    <action selector="routePlannerClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9zU-Uv-mk0"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hsI-M2-eZL" userLabel="Route Calculate">
-                                <rect key="frame" x="241" y="629" width="114" height="30"/>
-                                <state key="normal" title="Route Calculate"/>
-                                <connections>
-                                    <action selector="routeCalculatorClick:" destination="BYZ-38-t0r" eventType="touchDown" id="Y2b-LD-yLJ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AxF-oH-0qv">
-                                <rect key="frame" x="9" y="603" width="91" height="30"/>
-                                <state key="normal" title="Navigation"/>
-                                <connections>
-                                    <action selector="showNavigationClick:" destination="BYZ-38-t0r" eventType="touchDown" id="GWx-rR-nkD"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hm9-Zm-afd">
-                                <rect key="frame" x="16" y="565" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="testWaypointClick:" destination="BYZ-38-t0r" eventType="touchDown" id="M79-WT-9wH"/>
-                                </connections>
-                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fot-lU-67y">
+                                <rect key="frame" x="70" y="20" width="290" height="50"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bUb-6v-3gu">
+                                        <rect key="frame" x="10" y="10" width="270" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="textFieldReturn:" destination="BYZ-38-t0r" eventType="editingDidEndOnExit" id="q8c-zK-bNo"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="mapView" destination="c5p-hV-FQr" id="yTy-d2-zId"/>
-                        <outlet property="searchText" destination="bUb-6v-3gu" id="BBM-Pn-bZQ"/>
+                        <outlet property="searchText" destination="bUb-6v-3gu" id="h1o-QH-Pie"/>
+                        <outlet property="searchView" destination="fot-lU-67y" id="nIg-Ws-xS6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

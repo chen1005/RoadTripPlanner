@@ -26,7 +26,6 @@ class RouteModel: NSObject
     var partitionPoints = Array<RoutePartitionPoint>()
     var steps = Array<RouteStep>()
     var legs = Array<RouteLegs>()
-    var wayPoints = Array<String>()
     
     override init()
     {

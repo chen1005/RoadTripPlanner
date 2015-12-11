@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, SphereMenuDelegate, WayPointDelegate {
     
     // Initialize location to Purdue Univerisity - Zhuo Chen
     var currentLocation = CLLocation(latitude: 40.423705, longitude: -86.921195)
@@ -25,6 +25,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     // Create Google Place Autocomplete controller - Zhuo Chen
     let tripPlannerController = TripPlannerController()
     let navigationStepsController = NavigationStepsController()
+    let waypointController = WaypointController()
     
     // Create MarkerSets Model - Zhuo Chen
     var markerSets = MarkerSets()
@@ -42,86 +43,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     var routePolyline: GMSPolyline!
     
     @IBOutlet weak var mapView: GMSMapView!
+    @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var searchText: UITextField!
-    
-    @IBAction func testWaypointClick(sender: AnyObject)
-    {
-        self.mapTasks.getDirections(self.routeSets.defaultRoute.originAddress, destination: self.routeSets.defaultRoute.destinationAddress, waypoints: self.routeSets.defaultRoute.wayPoints, travelMode: nil, completionHandler: { (status, success) -> Void in
-            if success {
-                self.searchRoute()
-                self.configureMapAndMarkersForRoute()
-                self.drawRoute()
-                self.zoomToFitMapPartition()
-            }
-            else {
-                print(status)
-            }
-        })
-    }
-    
-    @IBAction func addWayPointsClick(sender: AnyObject)
-    {
-        if (self.selectedMarker != nil && routeSets.defaultRoute != nil)
-        {
-            let addressAlert = UIAlertController(title: "Add Waypoint", message: "\"" + self.selectedMarker.title + "\"" + " will be added to the route.\n\n" + "What stop number should this be?", preferredStyle: UIAlertControllerStyle.Alert)
-            
-            addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
-                    textField.placeholder = "Enter range between " + "(1, " + (self.routeSets.defaultRoute.wayPoints.count + 1).description + ")"
-            }
-            
-            let createRouteAction = UIAlertAction(title: "Add", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
-                let order = (addressAlert.textFields![0] as UITextField).text! as String
-                let waypoint = self.selectedMarker.snippet
-                
-                self.routeSets.defaultRoute.wayPoints.insert(waypoint, atIndex: Int(order)! - 1)
-            }
-            
-            let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
-                
-            }
-            
-            addressAlert.addAction(createRouteAction)
-            addressAlert.addAction(closeAction)
-            
-            presentViewController(addressAlert, animated: true, completion: nil)
-        }
-        else
-        {
-            var message = ""
-            
-            if (self.selectedMarker == nil)
-            {
-                message = "No waypoint selected"
-            }
-            else if (self.routeSets.defaultRoute == nil)
-            {
-                message = "No route created"
-            }
-            
-            showErrorAlert(message)
-        }
-    }
-    
-    @IBAction func routePlannerClick(sender: AnyObject)
-    {
-        self.presentViewController(tripPlannerController, animated:true, completion:nil)
-    }
-    
-    @IBAction func showNavigationClick(sender: AnyObject)
-    {
-        if (routeSets.defaultRoute != nil)
-        {
-            if (routeSets.defaultRoute.steps.count > 0)
-            {
-                self.presentViewController(navigationStepsController, animated:true, completion:nil)
-            }
-        }
-        else
-        {
-            let message = "No route created"
-            showErrorAlert(message)
-        }
-    }
     
     @IBAction func textFieldReturn(sender: AnyObject) {
         sender.resignFirstResponder()
@@ -150,7 +73,78 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         }
     }
     
-    @IBAction func routeCalculatorClick(sender: AnyObject)
+    func launchWaypoints()
+    {
+        self.presentViewController(waypointController, animated:true, completion:nil)
+    }
+    
+    func launchAddWaypoint()
+    {
+        if (self.selectedMarker != nil && routeSets.defaultRoute != nil)
+        {
+            let addressAlert = UIAlertController(title: "Add Waypoint", message: "\"" + self.selectedMarker.title + "\"" + " will be added to the route.\n\n" + "What stop number should this be?", preferredStyle: UIAlertControllerStyle.Alert)
+            
+            addressAlert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+                    textField.placeholder = "Enter range between " + "(1, " + (GlobalWaypoints.wayPoints.count + 1).description + ")"
+            }
+            
+            let createRouteAction = UIAlertAction(title: "Add", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
+                let order = (addressAlert.textFields![0] as UITextField).text! as String
+                let waypoint = self.selectedMarker.snippet
+            
+                self.selectedMarker.icon = GMSMarker.markerImageWithColor(UIColor.yellowColor())
+                
+                GlobalWaypoints.wayPoints.insert(waypoint, atIndex: Int(order)! - 1)
+            }
+            
+            let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel) { (alertAction) -> Void in
+                
+            }
+            
+            addressAlert.addAction(createRouteAction)
+            addressAlert.addAction(closeAction)
+            
+            presentViewController(addressAlert, animated: true, completion: nil)
+        }
+        else
+        {
+            var message = ""
+            
+            if (self.selectedMarker == nil)
+            {
+                message = "No waypoint selected"
+            }
+            else if (self.routeSets.defaultRoute == nil)
+            {
+                message = "No route created"
+            }
+            
+            showErrorAlert(message)
+        }
+    }
+    
+    func launchRoutePlanner()
+    {
+        self.presentViewController(tripPlannerController, animated:true, completion:nil)
+    }
+    
+    func launchNavigation()
+    {
+        if (routeSets.defaultRoute != nil)
+        {
+            if (routeSets.defaultRoute.steps.count > 0)
+            {
+                self.presentViewController(navigationStepsController, animated:true, completion:nil)
+            }
+        }
+        else
+        {
+            let message = "No route created"
+            showErrorAlert(message)
+        }
+    }
+    
+    func launchRouteCalculator()
     {
         let addressAlert = UIAlertController(title: "Create Route", message: "Connect locations with a route:", preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -190,7 +184,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                 if success {
                     self.searchRoute()
                     self.configureMapAndMarkersForRoute()
-                    self.drawRoute()
+                    self.drawRoute(true)
                     self.zoomToFitMapPartition()
                 }
                 else {
@@ -208,8 +202,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         presentViewController(addressAlert, animated: true, completion: nil)
     }
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -224,7 +216,61 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             locationManager.startUpdatingLocation()
         }
         
+        searchView.layer.masksToBounds = true
+        searchView.layer.cornerRadius = 10
+        
+        let start = UIImage(named: "start")
+        let image1 = UIImage(named: "interestPoint")
+        let image2 = UIImage(named: "waypoint")
+        let image3 = UIImage(named: "addWaypoint")
+        let image4 = UIImage(named: "route")
+        let image5 = UIImage(named: "navigation")
+        let images:[UIImage] = [image1!,image2!,image3!,image4!,image5!]
+        let menu = SphereMenu(startPoint: CGPointMake(35, 45), startImage: start!, submenuImages:images, tapToDismiss:true)
+        menu.delegate = self
+        self.view.addSubview(menu)
+        
+        waypointController.delegate = self
         mapView.delegate = self
+    }
+    
+    func sphereDidSelected(index: Int) {
+        switch index
+        {
+            case 0:
+                self.launchRoutePlanner()
+                break
+            case 1:
+                self.launchWaypoints()
+                break
+            case 2:
+                self.launchAddWaypoint()
+                break
+            case 3:
+                self.launchRouteCalculator()
+                break
+            case 4:
+                self.launchNavigation()
+                break
+            
+            default:
+                break
+        }
+    }
+    
+    func recalculateTaped()
+    {
+        self.mapTasks.getDirections(self.routeSets.defaultRoute.originAddress, destination: self.routeSets.defaultRoute.destinationAddress, waypoints: GlobalWaypoints.wayPoints, travelMode: nil, completionHandler: { (status, success) -> Void in
+            if success {
+                self.searchRoute()
+                self.configureMapAndMarkersForRoute()
+                self.drawRoute(false)
+                self.zoomToFitMapPartition()
+            }
+            else {
+                print(status)
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -595,7 +641,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         self.mapView.animateWithCameraUpdate(GMSCameraUpdate.fitBounds(bounds, withPadding: 30.0))
     }
     
-    func drawRoute()
+    func drawRoute(performTextSearch: Bool)
     {
         let route = routeSets.defaultRoute.overviewPolyline["points"] as! String
         let path: GMSPath = GMSPath(fromEncodedPath: route)
@@ -632,28 +678,31 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             
             gmsMarker.map = self.mapView
             
-            if (RouteInterestPointsModel.interestPoints != nil)
+            if (performTextSearch)
             {
-                for (var i = 0; i < RouteInterestPointsModel.interestPoints.count; i++)
+                if (RouteInterestPointsModel.interestPoints != nil)
                 {
-                    let query = RouteInterestPointsModel.interestPoints[i]
-                    selectUIColor = RouteInterestPointsModel.colors[i]
+                    for (var i = 0; i < RouteInterestPointsModel.interestPoints.count; i++)
+                    {
+                        let query = RouteInterestPointsModel.interestPoints[i]
+                        selectUIColor = RouteInterestPointsModel.colors[i]
             
-                    self.mapTasks.textSearch(query, location: position, radius: searchRadius, withCompletionHandler: { (status, success) -> Void in
-                        if (!success)
-                        {
-                            print(status)
+                        self.mapTasks.textSearch(query, location: position, radius: searchRadius, withCompletionHandler: { (status, success) -> Void in
+                            if (!success)
+                            {
+                                print(status)
                 
-                            if status == "ZERO_RESULTS" {
-                                print("The location could not be found.")
+                                if status == "ZERO_RESULTS" {
+                                    print("The location could not be found.")
+                                }
                             }
-                        }
-                        else
-                        {
-                            self.selectedMarker = nil
-                            self.searchMarker()
-                        }
-                    })
+                            else
+                            {
+                                self.selectedMarker = nil
+                                self.searchMarker()
+                            }
+                        })
+                    }
                 }
             }
         }
