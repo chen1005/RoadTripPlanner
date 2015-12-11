@@ -1,5 +1,5 @@
 //
-//  TripPlannerController.swift
+//  NavigationStepsController.swift
 //  RoadTripPlanner
 //
 //  Created by Rick Chen on 15/11/6.
@@ -17,7 +17,7 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
     var route : RouteModel!
     
     @IBOutlet weak var textHeader: UILabel!
-    
+    @IBOutlet weak var tableView: UITableView!
     @IBAction func mapViewTap(sender: AnyObject)
     {
         self.dismissViewControllerAnimated(true, completion:nil)
@@ -112,7 +112,8 @@ class NavigationStepsController: UIViewController, UITableViewDelegate, UITableV
             route.adjustedDurationInSeconds = Int(round(Double(route.totalDurationInSeconds) * (route.adjustedRadiusInMeters / route.totalRadiusInMeters)))
             
             //add the totals at the top of the view
-            textHeader.text = "Total Distance: " + parseDistance(route.totalDistanceInMeters)) + "\n" + "Total Time: " + parseDuration(route.totalDurationInSeconds)) + "\n" + "Total With Weather: " + parseDuration(route.adjustedDurationInSeconds))
+            textHeader.numberOfLines = 0
+            textHeader.text = "Total Distance: " + parseDistance(route.totalDistanceInMeters) + "\n" + "Total Time: " + parseDuration(route.totalDurationInSeconds) + "\n" + "Total With Weather: " + parseDuration(route.adjustedDurationInSeconds)
             
             //add the route steps to the view
             for step in route.steps
