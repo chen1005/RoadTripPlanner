@@ -57,6 +57,13 @@
                                     <action selector="showNavigationClick:" destination="BYZ-38-t0r" eventType="touchDown" id="GWx-rR-nkD"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hm9-Zm-afd">
+                                <rect key="frame" x="16" y="565" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="testWaypointClick:" destination="BYZ-38-t0r" eventType="touchDown" id="M79-WT-9wH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>

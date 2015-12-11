@@ -44,6 +44,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var searchText: UITextField!
     
+    @IBAction func testWaypointClick(sender: AnyObject)
+    {
+        self.mapTasks.getDirections(self.routeSets.defaultRoute.originAddress, destination: self.routeSets.defaultRoute.destinationAddress, waypoints: self.routeSets.defaultRoute.wayPoints, travelMode: nil, completionHandler: { (status, success) -> Void in
+            if success {
+                self.searchRoute()
+                self.configureMapAndMarkersForRoute()
+                self.drawRoute()
+                self.zoomToFitMapPartition()
+            }
+            else {
+                print(status)
+            }
+        })
+    }
+    
     @IBAction func addWayPointsClick(sender: AnyObject)
     {
         if (self.selectedMarker != nil && routeSets.defaultRoute != nil)
@@ -56,7 +71,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             
             let createRouteAction = UIAlertAction(title: "Add", style: UIAlertActionStyle.Default) { (alertAction) -> Void in
                 let order = (addressAlert.textFields![0] as UITextField).text! as String
-                let waypoint = self.selectedMarker.title
+                let waypoint = self.selectedMarker.snippet
                 
                 self.routeSets.defaultRoute.wayPoints.insert(waypoint, atIndex: Int(order)! - 1)
             }
@@ -170,11 +185,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                     destination = "place_id:" + item.placeId
                 }
             }
-            //Update to use waypoints
-            var wayPoints = Array<String>()
-            wayPoints.append("Springfield,IL")
             
-            self.mapTasks.getDirections(origin, destination: destination, waypoints: wayPoints, travelMode: nil, completionHandler: { (status, success) -> Void in
+            self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: nil, completionHandler: { (status, success) -> Void in
                 if success {
                     self.searchRoute()
                     self.configureMapAndMarkersForRoute()
@@ -620,7 +632,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             
             gmsMarker.map = self.mapView
             
-            /*if (RouteInterestPointsModel.interestPoints != nil)
+            if (RouteInterestPointsModel.interestPoints != nil)
             {
                 for (var i = 0; i < RouteInterestPointsModel.interestPoints.count; i++)
                 {
@@ -643,116 +655,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                         }
                     })
                 }
-            }*/
+            }
         }
         
         selectUIColor = nil
     }
-    
-    //John Shetler - function to return estimated time between two points
-    //Takes two MKMapItem objects corresponding to the start and end points
-    //Can be modified to take points in lat, lon form
-    //returns travel time in seconds
-    
-    /* Old code for AppleMaps
-    func calculateETA(srcPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D) -> NSInteger {
-        let request = MKDirectionsRequest()
-        let src = MKMapItem(placemark: MKPlacemark(coordinate: srcPnt, addressDictionary: nil))
-        let dst = MKMapItem(placemark: MKPlacemark(coordinate: dstPnt, addressDictionary: nil))
-        request.source = src
-        request.destination = dst
-        request.requestsAlternateRoutes = false
-        request.transportType = MKDirectionsTransportType.Automobile
-        let ret = NSInteger()
-        let directions = MKDirections(request: request)
-        
-        /*directions.calculateETAWithCompletionHandler{response, error in
-            if error == nil{
-                return
-            }else{
-                if let res = response{
-                    ret = NSInteger(res.expectedTravelTime)
-                    return
-                }
-            }
-        }*/
-        
-        return ret
-    }
-    */
-    
-    //John Shetler - function to return the additional travel time resulting from
-    //adding "newPnt" to the route
-    //Can be modified to take oints in lat, lon form
-    //src and dst should be the stops that precede and follow newPnt respectively
-    //If stops are removed or reordered, estimated time needs to be recalculated
-    //returns additional travel time in seconds
-   
-    /* Old code for AppleMaps
-    func calculateAdditionalTime(srcPnt: CLLocationCoordinate2D, newPnt: CLLocationCoordinate2D, dstPnt: CLLocationCoordinate2D)->NSInteger{
-        let originalTime = calculateETA(srcPnt, dstPnt: dstPnt)
-        let startToNew = calculateETA(srcPnt, dstPnt: newPnt)
-        let newToEnd = calculateETA(newPnt, dstPnt: dstPnt)
-        let modifiedTime = startToNew + newToEnd
-        return (modifiedTime - originalTime)
-    }
-    */
-    
-    //Nick Houser- function for route search
-    //takes search string and array of location coordinates (which represent current route)
-    //please note that if the points passed to this function are too far apart
-    //some interestpoints will be missed (not added to the map)
-    //this is unavoidable as the MKLocalSearch cannot return more than 10 results
-    //the solution is simply to pass this method a list of points close enough together that
-    //a local search between any two of the input points does not contain more than 10 interest points
-    /*func searchRoute(place: String, points: [CLLocationCoordinate2D], completionHandler: (success: Bool) -> Void)
-    {
-        //to avoid exceptions if array is empty (should never happen)
-        if (points.count == 0)
-        {
-            return
-        }
-        
-        //set up variables that don't need recreated in loop; request, searchstring, search radius
-        let request = MKLocalSearchRequest()
-        request.naturalLanguageQuery = place
-        
-        //loop through points
-        for routePointIndex in 0...points.count-2
-        {
-            //determine distance between the points using pythagoras
-            let lonOffset = points[routePointIndex].longitude - points[routePointIndex+1].longitude
-            let latOffset = points[routePointIndex].latitude - points[routePointIndex+1].latitude
-            let abDist = sqrt((lonOffset * lonOffset) + (latOffset * latOffset))
-            
-            //determine the center point between the points
-            let lonCen = (points[routePointIndex].longitude + points[routePointIndex+1].longitude)*0.5
-            let latCen = (points[routePointIndex].latitude + points[routePointIndex+1].latitude)*0.5
-            let searchCenter = CLLocationCoordinate2D(latitude: latCen, longitude: lonCen)
-            
-            //create the search and set its center and span
-            let searchRangeMultiplier = 1.1 * abDist
-            let searchSpan = MKCoordinateSpan(latitudeDelta: searchRangeMultiplier, longitudeDelta: searchRangeMultiplier)
-            request.region = MKCoordinateRegionMake(searchCenter, searchSpan)
-            let search = MKLocalSearch(request: request)
-            
-            //start the search
-            search.startWithCompletionHandler {
-                (response: MKLocalSearchResponse!, error: NSError!) -> Void in
-                
-                //for each result
-                for item in response.mapItems as! [MKMapItem] {
-                    
-                    //add a pin
-                    self.addLocation(item.name, latitude: item.placemark.location.coordinate.latitude, longitude: item.placemark.location.coordinate.longitude)
-                }
-                
-                //only resize if this is the last iteration
-                if (routePointIndex == points.count - 2)
-                {
-                    completionHandler(success: true)
-                }
-            }
-        }
-    }*/
 }
